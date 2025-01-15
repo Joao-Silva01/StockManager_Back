@@ -1,21 +1,33 @@
 package com.dev.StockManager.entities;
 
 
+
+import com.dev.StockManager.entities.enums.Category;
+import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.util.Objects;
 
+@Entity
 public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
     private String description;
-    private Double price;
+
+    @Column(precision = 10, scale = 2)
+    private BigDecimal price;
+    private Integer category;
 
     public Product(){}
 
-    public Product(Integer id, String name, String description, Double price) {
+    public Product(Integer id, String name, String description, BigDecimal price,Category category) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.category= category.getCod();
     }
 
     public Integer getId() {
@@ -42,14 +54,21 @@ public class Product {
         this.description = description;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
+    public Integer getCategory() {
+        return category;
+    }
+
+    public void setCategory(Integer category) {
+        this.category = category;
+    }
 
     @Override
     public boolean equals(Object o) {

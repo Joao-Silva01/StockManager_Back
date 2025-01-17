@@ -14,5 +14,11 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     @Query(value = "SELECT p.*, ps.quantity FROM PRODUCT AS P\n" +
             "RIGHT JOIN PRODUCT_STOCK  AS PS\n" +
             "ON p.id = ps.product_id", nativeQuery = true)
-    List<ProductDTO> findAllQ();
+    List<ProductDTO> findAllQuantity();
+
+    @Query(value = "SELECT p.*, ps.quantity FROM PRODUCT AS P\n" +
+            "RIGHT JOIN PRODUCT_STOCK  AS PS\n" +
+            "ON p.id = ps.product_id\n" +
+            "WHERE p.id = ?;", nativeQuery = true)
+    ProductDTO findProduct(Integer id);
 }

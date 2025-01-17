@@ -5,11 +5,12 @@ package com.dev.StockManager.entities;
 import com.dev.StockManager.entities.enums.Category;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
-public class Product {
+public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

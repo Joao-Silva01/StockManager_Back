@@ -20,11 +20,13 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<List<ProductDTO>> findAll(){
         var list = productService.findAll();
+
         return ResponseEntity.ok().body(list);
+
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<ProductDTO> findById(@PathVariable Integer id){
+    public ResponseEntity<?> findById(@PathVariable Integer id){
         var entity = productService.findById(id);
         return ResponseEntity.ok().body(entity);
     }

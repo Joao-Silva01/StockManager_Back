@@ -4,6 +4,7 @@ package com.dev.StockManager.controllers;
 import com.dev.StockManager.dtos.ProductDTO;
 import com.dev.StockManager.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,12 @@ public class ProductController {
     public ResponseEntity<?> findById(@PathVariable Integer id){
         var entity = productService.findById(id);
         return ResponseEntity.ok().body(entity);
+    }
+
+    @PostMapping
+    public ResponseEntity<?> Create(@RequestBody ProductDTO entity){
+        productService.Create(entity);
+        return ResponseEntity.ok().body("criado");
     }
 
 

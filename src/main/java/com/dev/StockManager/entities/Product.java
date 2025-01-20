@@ -1,6 +1,7 @@
 package com.dev.StockManager.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -18,6 +19,7 @@ public class Product implements Serializable {
     @Column(precision = 10, scale = 2)
     private BigDecimal price;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "category_id",nullable = false)
     private Category category_id;

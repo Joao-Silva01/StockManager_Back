@@ -3,5 +3,6 @@ CREATE TABLE Product(
     name VARCHAR(30) NOT NULL,
     description VARCHAR(100),
     price DECIMAL(10,2) NOT NULL,
-    Category INTEGER NOT NULL
+    category_id INTEGER ,
+    CONSTRAINT fk_category FOREIGN KEY (Category_id) REFERENCES Category(code)
 );

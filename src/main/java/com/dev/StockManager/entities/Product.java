@@ -1,8 +1,6 @@
 package com.dev.StockManager.entities;
 
 
-
-import com.dev.StockManager.entities.enums.Category;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -19,16 +17,19 @@ public class Product implements Serializable {
 
     @Column(precision = 10, scale = 2)
     private BigDecimal price;
-    private Integer category;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id",nullable = false)
+    private Category category_id;
 
     public Product(){}
 
-    public Product(Integer id, String name, String description, BigDecimal price,Category category) {
+    public Product(Integer id, String name, String description, BigDecimal price, Category category_id) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
-        this.category= category.getCod();
+        this.category_id = category_id;
     }
 
     public Integer getId() {
@@ -63,12 +64,12 @@ public class Product implements Serializable {
         this.price = price;
     }
 
-    public Integer getCategory() {
-        return category;
+    public Category getCategory_id() {
+        return category_id;
     }
 
-    public void setCategory(Integer category) {
-        this.category = category;
+    public void setCategory_id(Category category_id) {
+        this.category_id = category_id;
     }
 
     @Override

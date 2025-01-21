@@ -1,28 +1,27 @@
-package com.dev.StockManager.entities;
+package com.dev.StockManager.dtos;
 
-
-import jakarta.persistence.*;
+import com.dev.StockManager.entities.Category;
+import com.dev.StockManager.entities.Product;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Entity
-public class Category implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer code;
-    private String name;
+public class CategoryDTO implements Serializable {
 
-    @OneToMany(mappedBy = "category_id", cascade = CascadeType.ALL)
+    @NotNull
+    private Integer code;
+    @NotBlank
+    private String name;
     private List<Product> products = new ArrayList<>();
 
-    public Category() {
-    }
-
-    public Category(String name) {
-        this.name = name;
+    public CategoryDTO(Category entity) {
+        this.code = entity.getCode();
+        this.name = entity.getName();
+        this.products = entity.getProducts();
     }
 
     public Integer getCode() {
@@ -53,8 +52,8 @@ public class Category implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Category category = (Category) o;
-        return Objects.equals(code, category.code);
+        CategoryDTO that = (CategoryDTO) o;
+        return Objects.equals(code, that.code);
     }
 
     @Override

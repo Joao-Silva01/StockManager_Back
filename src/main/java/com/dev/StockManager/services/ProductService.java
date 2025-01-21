@@ -10,6 +10,7 @@ import com.dev.StockManager.repositories.ProductRepository;
 import com.dev.StockManager.repositories.ProductStockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,17 +32,22 @@ public class ProductService {
 
     public ProductDTO findById(Integer id){
         return productRepository.findProduct(id)
-                .orElseThrow(() -> new IdNotFoundException("Product with Id "+id +" not found"));
+                .orElseThrow(() -> new IdNotFoundException("Product id not found"));
     }
 
+    @Transactional
     public void Create(ProductDTO productDTO){
-        Category c = categoryRepository.findById(productDTO.getCategory()).get();
-        Product p1 = new Product(null,productDTO.getName(),productDTO.getDescription(), productDTO.getPrice(), c );
+        Category category = categoryRepository.findById(productDTO.getCategory())
+                .orElseThrow(() -> new IdNotFoundException("Category not found!"));
 
-        ProductStock ps1 = new ProductStock(null, productDTO.getQuantity(), p1);
+        Product product = new Product(productDTO.getName().strip(),productDTO.getDescription().strip(), productDTO.getPrice(), category );
 
-        productRepository.save(p1);
-        productStockRepository.save(ps1);
+        productRepository.save(product);
+
+        ProductStock productStock = new ProductStock(productDTO.getQuantity(), product);
+
+        productStockRepository.save(productStock);
+
     }
 
 

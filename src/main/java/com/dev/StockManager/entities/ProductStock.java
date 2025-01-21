@@ -22,8 +22,7 @@ public class ProductStock {
 
     public ProductStock(){}
 
-    public ProductStock(Integer id, Integer quantity, Product product) {
-        this.id = id;
+    public ProductStock(Integer quantity, Product product) {
         this.quantity = quantity;
         this.product = product;
     }

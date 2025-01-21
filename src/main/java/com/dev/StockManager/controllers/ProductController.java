@@ -3,16 +3,22 @@ package com.dev.StockManager.controllers;
 
 import com.dev.StockManager.dtos.ProductDTO;
 import com.dev.StockManager.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+
+import java.net.URI;
 import java.util.List;
 
 
 @RestController
 @RequestMapping(value = "/products")
+@Validated
 public class ProductController {
 
     @Autowired
@@ -33,9 +39,10 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<?> Create(@RequestBody ProductDTO entity){
+    public ResponseEntity<?> Create(@Valid @RequestBody  ProductDTO entity){
         productService.Create(entity);
-        return ResponseEntity.ok().body("criado");
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(entity.getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
 

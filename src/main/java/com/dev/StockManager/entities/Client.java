@@ -18,17 +18,18 @@ public class Client  implements Serializable {
     private Integer id;
 
     private String name;
-    private String cpf_Ou_Cnpj;
+    // cpf 11 digitos | cnpj 14 digitos
+    private String cpf_Or_Cnpj;
     private String email;
     private Timestamp register_Moment;
 
     @Enumerated(value = EnumType.STRING)
     private TypeClient type;
 
-    public Client(Integer id, String name, String cpf_Ou_Cnpj, String email, Timestamp register_Moment, TypeClient type) {
+    public Client(Integer id, String name, String cpf_Or_Cnpj, String email, Timestamp register_Moment, TypeClient type) {
         this.id = id;
         this.name = name;
-        this.cpf_Ou_Cnpj = cpf_Ou_Cnpj;
+        this.cpf_Or_Cnpj = cpf_Or_Cnpj;
         this.email = email;
         this.register_Moment = register_Moment;
         this.type = type;
@@ -50,12 +51,12 @@ public class Client  implements Serializable {
         this.name = name;
     }
 
-    public String getCpf_Ou_Cnpj() {
-        return cpf_Ou_Cnpj;
+    public String getCpf_Or_Cnpj() {
+        return cpf_Or_Cnpj;
     }
 
-    public void setCpf_Ou_Cnpj(String cpf_Ou_Cnpj) {
-        this.cpf_Ou_Cnpj = cpf_Ou_Cnpj;
+    public void setCpf_Or_Cnpj(String cpf_Or_Cnpj) {
+        this.cpf_Or_Cnpj = cpf_Or_Cnpj;
     }
 
     public String getEmail() {

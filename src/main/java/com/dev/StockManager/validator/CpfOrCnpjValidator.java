@@ -1,5 +1,6 @@
 package com.dev.StockManager.validator;
 
+import com.dev.StockManager.exceptions.Cpf_Or_CnpjException;
 import org.hibernate.validator.constraints.br.CPF;
 
 public class CpfOrCnpjValidator {
@@ -7,7 +8,7 @@ public class CpfOrCnpjValidator {
     public static boolean CpfValidator(String cpf) {
 
         if (cpf == null || cpf.length() != 11 || !cpf.matches("\\d{11}")) {
-            return false;
+            throw new Cpf_Or_CnpjException("CPF invalid!! "+ cpf);
         }
 
         int CheckDigit1 = CheckDigit(cpf, 10, "cpf");
@@ -20,7 +21,7 @@ public class CpfOrCnpjValidator {
     public static boolean CnpjValidator(String cnpj){
 
         if(cnpj == null || cnpj.length() != 14 || !cnpj.matches("\\d{14}")){
-            return false;
+            throw new Cpf_Or_CnpjException("CNPJ invalid!! "+ cnpj);
         }
 
         int CheckDigit1 = CheckDigit(cnpj, 12,"cnpj");

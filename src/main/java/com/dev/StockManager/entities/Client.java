@@ -23,8 +23,10 @@ public class Client  implements Serializable {
     private String email;
     private Timestamp register_Moment;
 
-    @Enumerated(value = EnumType.STRING)
+    @Enumerated(value = EnumType.ORDINAL)
     private TypeClient type;
+
+    public Client(){}
 
     public Client(Integer id, String name, String cpf_Or_Cnpj, String email, Timestamp register_Moment, TypeClient type) {
         this.id = id;

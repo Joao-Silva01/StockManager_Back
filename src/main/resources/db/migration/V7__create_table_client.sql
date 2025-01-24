@@ -4,5 +4,5 @@ CREATE TABLE Client(
     cpf_Or_Cnpj VARCHAR(14),
     email VARCHAR(100),
     register_Moment TIMESTAMP,
-    type VARCHAR(20)
+    type INTEGER
 );

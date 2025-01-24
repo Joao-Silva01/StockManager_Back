@@ -1,5 +1,6 @@
 package com.dev.StockManager.config;
 
+import com.dev.StockManager.exceptions.Cpf_Or_CnpjException;
 import com.dev.StockManager.exceptions.IdNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    private ResponseEntity<ErrorMessage> validationExceptionsHandle(MethodArgumentNotValidException exception,
+    private ResponseEntity<ErrorMessage> methodArgumentNotValidExceptionHandle(MethodArgumentNotValidException exception,
                                                                 HttpServletRequest request){
         BindingResult result = exception.getBindingResult();
         List<FieldError> fieldErrors = result.getFieldErrors();
@@ -34,6 +35,14 @@ public class GlobalExceptionHandler {
 
         ErrorMessage error = new ErrorMessage(Instant.now(),HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST, erroMessages, request.getRequestURI());
+
+        return ResponseEntity.status(error.getStatus()).body(error);
+    }
+
+    @ExceptionHandler(Cpf_Or_CnpjException.class)
+    private ResponseEntity<ErrorMessage> cpf_Or_CnpjExceptionHandle (Cpf_Or_CnpjException exception, HttpServletRequest request){
+        ErrorMessage error = new ErrorMessage(Instant.now(), HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST, exception.getMessage(), request.getRequestURI());
 
         return ResponseEntity.status(error.getStatus()).body(error);
     }

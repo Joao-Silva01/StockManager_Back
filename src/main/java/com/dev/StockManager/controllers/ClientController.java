@@ -29,7 +29,13 @@ public class ClientController {
 
     @PostMapping
     public ResponseEntity<ClientDTO> create(@Valid @RequestBody ClientDTO client){
-        clientService.Create(client);
+        clientService.create(client);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<ClientDTO> update(@PathVariable Integer id, @RequestBody ClientDTO client){
+        clientService.update(id,client);
         return ResponseEntity.ok().build();
     }
 }

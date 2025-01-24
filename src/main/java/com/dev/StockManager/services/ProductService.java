@@ -27,6 +27,7 @@ public class ProductService {
     private CategoryRepository categoryRepository;
 
     public List<ProductDTO> findAll(){
+
         return productRepository.findAllQuantity();
     }
 

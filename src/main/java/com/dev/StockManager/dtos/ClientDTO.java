@@ -1,39 +1,39 @@
-package com.dev.StockManager.entities;
+package com.dev.StockManager.dtos;
 
-
+import com.dev.StockManager.entities.Client;
 import com.dev.StockManager.entities.enums.TypeClient;
-import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.time.Instant;
-import java.util.Date;
 import java.util.Objects;
 
-@Entity
-public class Client  implements Serializable {
+public class ClientDTO implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank(message = "name - cannot be null or empty")
     private String name;
+
+    @NotBlank(message = "cpf_Or_Cnpj - cannot be null or empty")
     private String cpf_Or_Cnpj;
     private String email;
+
     private Timestamp register_Moment;
 
-    @Enumerated(value = EnumType.ORDINAL)
+    @NotNull(message = "type cannot be null")
     private TypeClient type;
 
-    public Client(){}
+    public ClientDTO() {
+    }
 
-    public Client(Integer id, String name, String cpf_Or_Cnpj, String email, Timestamp register_Moment, TypeClient type) {
-        this.id = id;
-        this.name = name;
-        this.cpf_Or_Cnpj = cpf_Or_Cnpj;
-        this.email = email;
-        this.register_Moment = register_Moment;
-        this.type = type;
+    public ClientDTO(Client entity) {
+        this.id = entity.getId();
+        this.name = entity.getName();
+        this.cpf_Or_Cnpj = entity.getCpf_Or_Cnpj();
+        this.email = entity.getEmail();
+        this.register_Moment = entity.getRegister_Moment();
+        this.type = entity.getType();
     }
 
     public Integer getId() {
@@ -76,11 +76,11 @@ public class Client  implements Serializable {
         this.register_Moment = register_Moment;
     }
 
-    public TypeClient getType() {
+    public @NotNull(message = "type cannot be null") TypeClient getType() {
         return type;
     }
 
-    public void setType(TypeClient type) {
+    public void setType(@NotNull(message = "type cannot be null") TypeClient type) {
         this.type = type;
     }
 
@@ -88,8 +88,8 @@ public class Client  implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Client client = (Client) o;
-        return Objects.equals(id, client.id);
+        ClientDTO clientDTO = (ClientDTO) o;
+        return Objects.equals(id, clientDTO.id);
     }
 
     @Override

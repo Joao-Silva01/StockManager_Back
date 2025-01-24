@@ -1,7 +1,9 @@
 package com.dev.StockManager.controllers;
 
+import com.dev.StockManager.dtos.ClientDTO;
 import com.dev.StockManager.entities.Client;
 import com.dev.StockManager.services.ClientService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +18,17 @@ public class ClientController {
     private ClientService clientService;
 
     @GetMapping
-    public ResponseEntity<List<Client>> findAll (){
+    public ResponseEntity<List<ClientDTO>> findAll (){
         return ResponseEntity.ok().body(clientService.findAll());
     }
 
+    @GetMapping(value = "{id}")
+    public ResponseEntity<ClientDTO> findById(@PathVariable int id){
+        return ResponseEntity.ok().body(clientService.findById(id));
+    }
+
     @PostMapping
-    public ResponseEntity<Client> create(@RequestBody Client client){
+    public ResponseEntity<ClientDTO> create(@Valid @RequestBody ClientDTO client){
         clientService.Create(client);
         return ResponseEntity.ok().build();
     }

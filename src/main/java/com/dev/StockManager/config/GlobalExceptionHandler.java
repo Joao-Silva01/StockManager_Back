@@ -1,10 +1,11 @@
 package com.dev.StockManager.config;
 
-import com.dev.StockManager.exceptions.Cpf_Or_CnpjException;
+import com.dev.StockManager.exceptions.ValidatorException;
 import com.dev.StockManager.exceptions.IdNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -39,11 +40,22 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(error.getStatus()).body(error);
     }
 
-    @ExceptionHandler(Cpf_Or_CnpjException.class)
-    private ResponseEntity<ErrorMessage> cpf_Or_CnpjExceptionHandle (Cpf_Or_CnpjException exception, HttpServletRequest request){
+    @ExceptionHandler(ValidatorException.class)
+    private ResponseEntity<ErrorMessage> validatorExceptionHandle (ValidatorException exception, HttpServletRequest request){
         ErrorMessage error = new ErrorMessage(Instant.now(), HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST, exception.getMessage(), request.getRequestURI());
 
         return ResponseEntity.status(error.getStatus()).body(error);
     }
+
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    private ResponseEntity<ErrorMessage> httpMessageNotReadableExceptionHandle (HttpMessageNotReadableException exception, HttpServletRequest request){
+        ErrorMessage error = new ErrorMessage(Instant.now(), HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST, "Invalid Type", request.getRequestURI());
+
+        return ResponseEntity.status(error.getStatus()).body(error);
+    }
 }
+
+

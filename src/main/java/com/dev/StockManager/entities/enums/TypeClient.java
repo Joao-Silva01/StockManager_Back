@@ -1,6 +1,11 @@
 package com.dev.StockManager.entities.enums;
 
-public enum TypeClient {
+import com.dev.StockManager.exceptions.ValidatorException;
+import com.fasterxml.jackson.annotation.JsonCreator;
+
+import java.util.Arrays;
+
+public enum TypeClient  {
 
     INDIVIDUAL_CLIENT(0),
     CORPORATE_CLIENT(1);

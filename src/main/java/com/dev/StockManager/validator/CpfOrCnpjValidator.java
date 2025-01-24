@@ -1,14 +1,16 @@
 package com.dev.StockManager.validator;
 
-import com.dev.StockManager.exceptions.Cpf_Or_CnpjException;
-import org.hibernate.validator.constraints.br.CPF;
+import com.dev.StockManager.entities.enums.TypeClient;
+import com.dev.StockManager.exceptions.ValidatorException;
+
+import java.util.Objects;
 
 public class CpfOrCnpjValidator {
 
     public static boolean CpfValidator(String cpf) {
 
         if (cpf == null || cpf.length() != 11 || !cpf.matches("\\d{11}")) {
-            throw new Cpf_Or_CnpjException("CPF invalid!! "+ cpf);
+            throw new ValidatorException("Invalid CPF format!! " + cpf);
         }
 
         int CheckDigit1 = CheckDigit(cpf, 10, "cpf");
@@ -18,14 +20,14 @@ public class CpfOrCnpjValidator {
                 && CheckDigit2 == Integer.parseInt(String.valueOf(cpf.charAt(10)));
     }
 
-    public static boolean CnpjValidator(String cnpj){
+    public static boolean CnpjValidator(String cnpj) {
 
-        if(cnpj == null || cnpj.length() != 14 || !cnpj.matches("\\d{14}")){
-            throw new Cpf_Or_CnpjException("CNPJ invalid!! "+ cnpj);
+        if (cnpj == null || cnpj.length() != 14 || !cnpj.matches("\\d{14}")) {
+            throw new ValidatorException("Invalid CNPJ format!! " + cnpj);
         }
 
-        int CheckDigit1 = CheckDigit(cnpj, 12,"cnpj");
-        int CheckDigit2 = CheckDigit(cnpj,13,"cnpj");
+        int CheckDigit1 = CheckDigit(cnpj, 12, "cnpj");
+        int CheckDigit2 = CheckDigit(cnpj, 13, "cnpj");
 
         return CheckDigit1 == Integer.parseInt(String.valueOf(cnpj.charAt(12)))
                 && CheckDigit2 == Integer.parseInt(String.valueOf(cnpj.charAt(13)));

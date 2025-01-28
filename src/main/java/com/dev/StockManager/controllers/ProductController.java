@@ -39,10 +39,16 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<?> Create(@Valid @RequestBody  ProductDTO entity){
+    public ResponseEntity<?> create(@Valid @RequestBody  ProductDTO entity){
         productService.Create(entity);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(entity.getId()).toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<?> update(@PathVariable Integer id,@RequestBody ProductDTO entity){
+        productService.update(id,entity);
+        return ResponseEntity.ok().build();
     }
 
 

@@ -1,7 +1,9 @@
 package com.dev.StockManager.services;
 
+import com.dev.StockManager.dtos.ClientDTO;
 import com.dev.StockManager.dtos.ProductDTO;
 import com.dev.StockManager.entities.Category;
+import com.dev.StockManager.entities.Client;
 import com.dev.StockManager.entities.Product;
 import com.dev.StockManager.entities.ProductStock;
 import com.dev.StockManager.exceptions.IdNotFoundException;
@@ -41,7 +43,8 @@ public class ProductService {
         Category category = categoryRepository.findById(productDTO.getCategory())
                 .orElseThrow(() -> new IdNotFoundException("Category not found!"));
 
-        Product product = new Product(productDTO.getName().strip(),productDTO.getDescription().strip(), productDTO.getPrice(), category );
+        Product product = new Product(null,productDTO.getName().strip(),productDTO.getDescription().strip(),
+                productDTO.getPrice(), category );
 
         productRepository.save(product);
 
@@ -49,6 +52,25 @@ public class ProductService {
 
         productStockRepository.save(productStock);
 
+    }
+
+    public void update(Integer id, ProductDTO productDTO){
+        ProductDTO prDTO = findById(id);
+
+        // Atualizando campos não nulos
+        if (productDTO.getName() != null) prDTO.setName(productDTO.getName());
+        if (productDTO.getDescription() != null) prDTO.setDescription(productDTO.getDescription());
+        if (productDTO.getPrice() != null) prDTO.setPrice(productDTO.getPrice());
+        if(productDTO.getQuantity() != null) prDTO.setQuantity(productDTO.getQuantity());
+
+        Product pr = new Product(prDTO.getId(), prDTO.getName(), prDTO.getDescription(),
+                prDTO.getPrice(), categoryRepository.findById(prDTO.getCategory()).get());
+
+        ProductStock stock = productStockRepository.findProductStock(prDTO.getId());
+        stock.setQuantity(prDTO.getQuantity());
+
+        productRepository.save(pr);
+        productStockRepository.save(stock);
     }
 
 

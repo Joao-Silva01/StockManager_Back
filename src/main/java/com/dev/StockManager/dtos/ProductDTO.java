@@ -42,24 +42,48 @@ public class ProductDTO implements Serializable {
         return id;
     }
 
-    public String getName() {
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public @NotBlank(message = "Name cannot be null or empty") String getName() {
         return name;
+    }
+
+    public void setName(@NotBlank(message = "Name cannot be null or empty") String name) {
+        this.name = name;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public BigDecimal getPrice() {
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public @NotNull(message = "Price cannot be null") @DecimalMin(value = "0.01", message = "price cannot be negative or equal to zero") BigDecimal getPrice() {
         return price;
     }
 
-    public Integer getCategory() {
+    public void setPrice(@NotNull(message = "Price cannot be null") @DecimalMin(value = "0.01", message = "price cannot be negative or equal to zero") BigDecimal price) {
+        this.price = price;
+    }
+
+    public @NotNull(message = "Category cannot be null") Integer getCategory() {
         return category;
     }
 
-    public Integer getQuantity() {
+    public void setCategory(@NotNull(message = "Category cannot be null") Integer category) {
+        this.category = category;
+    }
+
+    public @NotNull(message = "Quantity cannot be null") @Min(value = 1, message = "Quantity cannot be negative or zero") Integer getQuantity() {
         return quantity;
+    }
+
+    public void setQuantity(@NotNull(message = "Quantity cannot be null") @Min(value = 1, message = "Quantity cannot be negative or zero") Integer quantity) {
+        this.quantity = quantity;
     }
 
     @Override

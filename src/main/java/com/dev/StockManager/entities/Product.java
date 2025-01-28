@@ -26,7 +26,8 @@ public class Product implements Serializable {
 
     public Product(){}
 
-    public Product(String name, String description, BigDecimal price, Category category_id) {
+    public Product(Integer id,String name, String description, BigDecimal price, Category category_id) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;

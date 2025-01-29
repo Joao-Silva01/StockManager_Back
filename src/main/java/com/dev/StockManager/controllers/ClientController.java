@@ -1,7 +1,6 @@
 package com.dev.StockManager.controllers;
 
 import com.dev.StockManager.dtos.ClientDTO;
-import com.dev.StockManager.entities.Client;
 import com.dev.StockManager.services.ClientService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

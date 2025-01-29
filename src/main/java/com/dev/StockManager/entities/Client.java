@@ -7,8 +7,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 public class Client  implements Serializable {
@@ -24,6 +23,9 @@ public class Client  implements Serializable {
 
     @Enumerated(value = EnumType.ORDINAL)
     private TypeClient type;
+
+    @OneToMany(mappedBy = "clientId", cascade = CascadeType.ALL)
+    private List<Phone> phones = new ArrayList<>();
 
     public Client(){}
 
@@ -82,6 +84,14 @@ public class Client  implements Serializable {
 
     public void setType(TypeClient type) {
         this.type = type;
+    }
+
+    public List<Phone> getPhones() {
+        return phones;
+    }
+
+    public void setPhones(List<Phone> phones) {
+        this.phones = phones;
     }
 
     @Override

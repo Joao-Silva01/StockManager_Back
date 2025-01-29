@@ -1,11 +1,15 @@
 package com.dev.StockManager.dtos;
 
 import com.dev.StockManager.entities.Client;
+import com.dev.StockManager.entities.Phone;
 import com.dev.StockManager.entities.enums.TypeClient;
 import jakarta.validation.constraints.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 
 public class ClientDTO implements Serializable {
@@ -24,6 +28,8 @@ public class ClientDTO implements Serializable {
     @NotNull(message = "type cannot be null")
     private TypeClient type;
 
+    private List<Integer> phones = new ArrayList<>();
+
     public ClientDTO() {
     }
 
@@ -34,6 +40,7 @@ public class ClientDTO implements Serializable {
         this.email = entity.getEmail();
         this.register_Moment = entity.getRegister_Moment();
         this.type = entity.getType();
+        this.phones.addAll(entity.getPhones().stream().map(x -> x.getNumber()).toList());
     }
 
     public Integer getId() {
@@ -76,12 +83,20 @@ public class ClientDTO implements Serializable {
         this.register_Moment = register_Moment;
     }
 
-    public @NotNull(message = "type cannot be null") TypeClient getType() {
+    public TypeClient getType() {
         return type;
     }
 
-    public void setType(@NotNull(message = "type cannot be null") TypeClient type) {
+    public void setType(TypeClient type) {
         this.type = type;
+    }
+
+    public List<Integer> getPhones() {
+        return phones;
+    }
+
+    public void setPhones(List<Integer> phones) {
+        this.phones = phones;
     }
 
     @Override

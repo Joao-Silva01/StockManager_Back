@@ -2,17 +2,18 @@ package com.dev.StockManager.services;
 
 import com.dev.StockManager.dtos.ClientDTO;
 import com.dev.StockManager.entities.Client;
+import com.dev.StockManager.entities.Phone;
 import com.dev.StockManager.entities.enums.TypeClient;
 import com.dev.StockManager.exceptions.IdNotFoundException;
 import com.dev.StockManager.exceptions.ValidatorException;
 import com.dev.StockManager.repositories.ClientRepository;
 import com.dev.StockManager.validator.CpfOrCnpjValidator;
-import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -50,6 +51,10 @@ public class ClientService {
 
         Client client1 = new Client(entity.getId(), entity.getName().strip(), entity.getCpf_Or_Cnpj().strip(), entity.getEmail().strip(),
                 Timestamp.from(Instant.now()), entity.getType());
+        List<Phone> p = new ArrayList<>();
+        p.addAll(entity.getPhones().stream().map(x -> new Phone(null,x,client1)).toList());
+
+        client1.setPhones(p);
 
         clientRepository.save(client1);
     }

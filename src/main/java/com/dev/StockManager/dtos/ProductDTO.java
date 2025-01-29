@@ -1,5 +1,6 @@
 package com.dev.StockManager.dtos;
 
+import com.dev.StockManager.entities.Phone;
 import com.dev.StockManager.entities.Product;
 import com.dev.StockManager.entities.ProductStock;
 import jakarta.validation.constraints.*;
@@ -37,6 +38,8 @@ public class ProductDTO implements Serializable {
         this.category = category;
         this.quantity = quantity;
     }
+
+
 
     public Integer getId() {
         return id;

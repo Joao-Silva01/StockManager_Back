@@ -1,31 +1,33 @@
-package com.dev.StockManager.entities;
+package com.dev.StockManager.dtos;
 
-import jakarta.persistence.*;
+import com.dev.StockManager.entities.Client;
+import com.dev.StockManager.entities.Phone;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-@Entity
-public class Phone implements Serializable {
+public class PhoneDTO implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Integer id;
-    private String number;
 
-    @ManyToOne
-    @JoinColumn(name = "client_id",nullable = false)
+    @Size(min = 11, max = 11, message = "The phone size must be 11 (with area code)")
+    private String number;
+    @JsonIgnore
     private Client clientId;
 
-    public Phone() {
+    public PhoneDTO() {
     }
 
-    public Phone(Integer id, String number, Client clientId) {
-        this.id = id;
-        this.number = number;
-        this.clientId = clientId;
+    public PhoneDTO(Phone phone) {
+        this.id = phone.getId();
+        this.number = phone.getNumber();
+        this.clientId = phone.getClientId();
     }
-
 
     public Integer getId() {
         return id;
@@ -55,8 +57,8 @@ public class Phone implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Phone phone = (Phone) o;
-        return Objects.equals(id, phone.id);
+        PhoneDTO phoneDTO = (PhoneDTO) o;
+        return Objects.equals(id, phoneDTO.id);
     }
 
     @Override

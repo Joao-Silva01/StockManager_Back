@@ -1,12 +1,14 @@
 package com.dev.StockManager.services;
 
 import com.dev.StockManager.dtos.ClientDTO;
+import com.dev.StockManager.dtos.PhoneDTO;
 import com.dev.StockManager.entities.Client;
 import com.dev.StockManager.entities.Phone;
 import com.dev.StockManager.entities.enums.TypeClient;
 import com.dev.StockManager.exceptions.IdNotFoundException;
 import com.dev.StockManager.exceptions.ValidatorException;
 import com.dev.StockManager.repositories.ClientRepository;
+import com.dev.StockManager.repositories.PhoneRepository;
 import com.dev.StockManager.validator.CpfOrCnpjValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,9 @@ public class ClientService {
 
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private PhoneRepository phoneRepository;
 
     public List<ClientDTO> findAll() {
         List<Client> list = clientRepository.findAll();
@@ -52,14 +57,13 @@ public class ClientService {
         Client client1 = new Client(entity.getId(), entity.getName().strip(), entity.getCpf_Or_Cnpj().strip(), entity.getEmail().strip(),
                 Timestamp.from(Instant.now()), entity.getType());
         List<Phone> p = new ArrayList<>();
-        p.addAll(entity.getPhones().stream().map(x -> new Phone(null,x,client1)).toList());
+        p.addAll(entity.getPhones().stream().map(x -> new Phone(null, x.getNumber(), client1)).toList());
 
         client1.setPhones(p);
-
         clientRepository.save(client1);
     }
 
-    public void update(Integer id,ClientDTO clientDTO) {
+    public void update(Integer id, ClientDTO clientDTO) {
         ClientDTO ctDTO = findById(id);
 
         // Atualizando campos não nulos
@@ -72,4 +76,24 @@ public class ClientService {
 
         clientRepository.save(ct);
     }
+
+    public void updateClientPhone(Integer clientId, Integer phoneId, PhoneDTO phone) {
+        Client ct = clientRepository.findById(clientId).get();
+        Phone p = null;
+
+        if (phoneId == 0) {
+            p = phoneRepository.findById(ct.getPhones().get(0).getId()).get();
+            p.setNumber(phone.getNumber());
+            ct.getPhones().add(0, p);
+        } else if (phoneId == 1) {
+            p = phoneRepository.findById(ct.getPhones().get(1).getId()).get();
+            p.setNumber(phone.getNumber());
+            ct.getPhones().add(1, p);
+        }
+        //p.setNumber(phone.getNumber());
+        phoneRepository.save(p);
+        clientRepository.save(ct);
+    }
+
+
 }

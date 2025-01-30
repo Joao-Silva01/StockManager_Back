@@ -1,6 +1,7 @@
 package com.dev.StockManager.controllers;
 
 import com.dev.StockManager.dtos.ClientDTO;
+import com.dev.StockManager.dtos.PhoneDTO;
 import com.dev.StockManager.services.ClientService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,12 @@ public class ClientController {
     @PutMapping(value = "/{id}")
     public ResponseEntity<ClientDTO> update(@PathVariable Integer id, @RequestBody ClientDTO client){
         clientService.update(id,client);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(value = "/{clientId}/phones/{phoneId}")
+    public ResponseEntity<PhoneDTO> update(@PathVariable Integer clientId, @PathVariable Integer phoneId,@Valid @RequestBody PhoneDTO phone){
+        clientService.updateClientPhone(clientId,phoneId,phone);
         return ResponseEntity.ok().build();
     }
 }

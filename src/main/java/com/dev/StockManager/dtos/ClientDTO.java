@@ -28,7 +28,8 @@ public class ClientDTO implements Serializable {
     @NotNull(message = "type cannot be null")
     private TypeClient type;
 
-    private List<Integer> phones = new ArrayList<>();
+    @Size(max = 2, min = 1, message = "Invalid size! Only fits 1 to 2 phones")
+    private List<PhoneDTO> phones = new ArrayList<>();
 
     public ClientDTO() {
     }
@@ -40,7 +41,7 @@ public class ClientDTO implements Serializable {
         this.email = entity.getEmail();
         this.register_Moment = entity.getRegister_Moment();
         this.type = entity.getType();
-        this.phones.addAll(entity.getPhones().stream().map(x -> x.getNumber()).toList());
+        this.phones = entity.getPhones().stream().map(x -> new PhoneDTO(x)).toList();
     }
 
     public Integer getId() {
@@ -91,11 +92,11 @@ public class ClientDTO implements Serializable {
         this.type = type;
     }
 
-    public List<Integer> getPhones() {
+    public List<PhoneDTO> getPhones() {
         return phones;
     }
 
-    public void setPhones(List<Integer> phones) {
+    public void setPhones(List<PhoneDTO> phones) {
         this.phones = phones;
     }
 

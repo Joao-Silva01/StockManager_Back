@@ -1,5 +1,6 @@
 package com.dev.StockManager.controllers;
 
+import com.dev.StockManager.dtos.AddressDTO;
 import com.dev.StockManager.dtos.ClientDTO;
 import com.dev.StockManager.dtos.PhoneDTO;
 import com.dev.StockManager.services.ClientService;
@@ -40,8 +41,14 @@ public class ClientController {
     }
 
     @PutMapping(value = "/{clientId}/phones/{phoneId}")
-    public ResponseEntity<PhoneDTO> update(@PathVariable Integer clientId, @PathVariable Integer phoneId,@Valid @RequestBody PhoneDTO phone){
+    public ResponseEntity<PhoneDTO> updatePhone(@PathVariable Integer clientId, @PathVariable Integer phoneId,@Valid @RequestBody PhoneDTO phone){
         clientService.updateClientPhone(clientId,phoneId,phone);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(value = "/{clientId}/addresses/{indexAddress}")
+    public ResponseEntity<PhoneDTO> updateAddress(@PathVariable Integer clientId, @PathVariable Integer indexAddress,@Valid @RequestBody AddressDTO address){
+        clientService.updateClientAddress(clientId,indexAddress,address);
         return ResponseEntity.ok().build();
     }
 }

@@ -56,6 +56,14 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(error.getStatus()).body(error);
     }
+
+    @ExceptionHandler(IndexOutOfBoundsException.class)
+    private  ResponseEntity<ErrorMessage> indexOutOfBoundsExceptionHandle(IndexOutOfBoundsException exception, HttpServletRequest request){
+        ErrorMessage error = new ErrorMessage(Instant.now(), HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST, "This item does not exist!", request.getRequestURI());
+
+        return ResponseEntity.status(error.getStatus()).body(error);
+    }
 }
 
 

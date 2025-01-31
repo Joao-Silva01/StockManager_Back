@@ -3,6 +3,7 @@ package com.dev.StockManager.dtos;
 import com.dev.StockManager.entities.Address;
 import com.dev.StockManager.entities.Client;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Max;
 
 public class AddressDTO {
@@ -10,17 +11,17 @@ public class AddressDTO {
     @JsonIgnore
     private Integer id;
 
-    @Max(100)
+    @Column(length = 100)
     private String streetName;
 
-    @Max(150)
+    @Column(length = 150)
     private String complement;
 
-    @Max(100)
+    @Column(length = 100)
     private String neighborhoodName;
     private Integer number;
 
-    @Max(8)
+    @Column(length = 8)
     private String cep;
 
     @JsonIgnore

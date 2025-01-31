@@ -1,5 +1,6 @@
 package com.dev.StockManager.services;
 
+import com.dev.StockManager.dtos.AddressDTO;
 import com.dev.StockManager.dtos.ClientDTO;
 import com.dev.StockManager.dtos.PhoneDTO;
 import com.dev.StockManager.entities.Address;
@@ -8,6 +9,7 @@ import com.dev.StockManager.entities.Phone;
 import com.dev.StockManager.entities.enums.TypeClient;
 import com.dev.StockManager.exceptions.IdNotFoundException;
 import com.dev.StockManager.exceptions.ValidatorException;
+import com.dev.StockManager.repositories.AddressRepository;
 import com.dev.StockManager.repositories.ClientRepository;
 import com.dev.StockManager.repositories.PhoneRepository;
 import com.dev.StockManager.validator.CpfOrCnpjValidator;
@@ -29,6 +31,9 @@ public class ClientService {
 
     @Autowired
     private PhoneRepository phoneRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
 
     public List<ClientDTO> findAll() {
         List<Client> list = clientRepository.findAll();
@@ -83,21 +88,54 @@ public class ClientService {
         clientRepository.save(ct);
     }
 
-    public void updateClientPhone(Integer clientId, Integer phoneId, PhoneDTO phone) {
-        Client ct = clientRepository.findById(clientId).get();
-        Phone p = null;
+    public void updateClientPhone(Integer clientId, Integer indexPhone, PhoneDTO phone) {
+        Client ct = clientRepository.findById(clientId).orElseThrow(() -> new IdNotFoundException("Client not found!"));
+        Phone p = new Phone();
 
-        if (phoneId == 0) {
-            p = phoneRepository.findById(ct.getPhones().get(0).getId()).get();
+        if (indexPhone == 0) {
+            p = phoneRepository.findById(ct.getPhones().getFirst().getId()).get();
             p.setNumber(phone.getNumber());
-            ct.getPhones().add(0, p);
-        } else if (phoneId == 1) {
+            ct.getPhones().addFirst(p);
+        } else if (indexPhone == 1) {
             p = phoneRepository.findById(ct.getPhones().get(1).getId()).get();
             p.setNumber(phone.getNumber());
             ct.getPhones().add(1, p);
         }
-        //p.setNumber(phone.getNumber());
+
         phoneRepository.save(p);
+        clientRepository.save(ct);
+    }
+
+    public void updateClientAddress(Integer clientId, Integer indexAddress, AddressDTO address){
+        Client ct = clientRepository.findById(clientId).orElseThrow(() -> new IdNotFoundException("Client not found!"));
+        Address addr;
+
+        if (indexAddress == 0) {
+            addr = addressRepository.findById(ct.getAddresses().getFirst().getId()).get();
+
+            addr.setStreetName(address.getStreetName());
+            addr.setComplement(address.getComplement());
+            addr.setNeighborhoodName(address.getNeighborhoodName());
+            addr.setNumber(address.getNumber());
+            addr.setCep(address.getCep());
+
+        } else if (indexAddress == 1) {
+            addr = addressRepository.findById(ct.getAddresses().get(1).getId()).get();
+            addr.setStreetName(address.getStreetName());
+            addr.setComplement(address.getComplement());
+            addr.setNeighborhoodName(address.getNeighborhoodName());
+            addr.setNumber(address.getNumber());
+            addr.setCep(address.getCep());
+        } else{
+            addr = addressRepository.findById(ct.getAddresses().get(2).getId()).get();
+            addr.setStreetName(address.getStreetName());
+            addr.setComplement(address.getComplement());
+            addr.setNeighborhoodName(address.getNeighborhoodName());
+            addr.setNumber(address.getNumber());
+            addr.setCep(address.getCep());
+        }
+
+        addressRepository.save(addr);
         clientRepository.save(ct);
     }
 

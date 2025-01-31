@@ -98,6 +98,14 @@ public class Client  implements Serializable {
         this.phones = phones;
     }
 
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

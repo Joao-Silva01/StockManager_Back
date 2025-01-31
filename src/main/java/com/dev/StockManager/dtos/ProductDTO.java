@@ -28,9 +28,10 @@ public class ProductDTO implements Serializable {
     @Min(value = 1, message = "Quantity cannot be negative or zero")
     private Integer quantity;
 
-    public ProductDTO(){}
+    public ProductDTO() {
+    }
 
-    public ProductDTO( Integer id,String name,String description,BigDecimal price, Integer category,Integer quantity) {
+    public ProductDTO(Integer id, String name, String description, BigDecimal price, Integer category, Integer quantity) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -38,7 +39,6 @@ public class ProductDTO implements Serializable {
         this.category = category;
         this.quantity = quantity;
     }
-
 
 
     public Integer getId() {
@@ -49,11 +49,11 @@ public class ProductDTO implements Serializable {
         this.id = id;
     }
 
-    public @NotBlank(message = "Name cannot be null or empty") String getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(@NotBlank(message = "Name cannot be null or empty") String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -65,40 +65,29 @@ public class ProductDTO implements Serializable {
         this.description = description;
     }
 
-    public @NotNull(message = "Price cannot be null") @DecimalMin(value = "0.01", message = "price cannot be negative or equal to zero") BigDecimal getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(@NotNull(message = "Price cannot be null") @DecimalMin(value = "0.01", message = "price cannot be negative or equal to zero") BigDecimal price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public @NotNull(message = "Category cannot be null") Integer getCategory() {
+    public Integer getCategory() {
         return category;
     }
 
-    public void setCategory(@NotNull(message = "Category cannot be null") Integer category) {
+    public void setCategory(Integer category) {
         this.category = category;
     }
 
-    public @NotNull(message = "Quantity cannot be null") @Min(value = 1, message = "Quantity cannot be negative or zero") Integer getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(@NotNull(message = "Quantity cannot be null") @Min(value = 1, message = "Quantity cannot be negative or zero") Integer quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ProductDTO that = (ProductDTO) o;
-        return Objects.equals(id, that.id);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
 }

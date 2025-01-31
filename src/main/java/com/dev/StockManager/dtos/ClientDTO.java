@@ -1,5 +1,6 @@
 package com.dev.StockManager.dtos;
 
+import com.dev.StockManager.entities.Address;
 import com.dev.StockManager.entities.Client;
 import com.dev.StockManager.entities.Phone;
 import com.dev.StockManager.entities.enums.TypeClient;
@@ -21,6 +22,8 @@ public class ClientDTO implements Serializable {
 
     @NotBlank(message = "cpf_Or_Cnpj - cannot be null or empty")
     private String cpf_Or_Cnpj;
+
+    @Pattern(regexp = "^[a-zA-Z0-9_-]+@[a-zA-Z]+[.][a-zA-Z]{3}$", message = "Incorrect email!!")
     private String email;
 
     private Timestamp register_Moment;
@@ -28,8 +31,11 @@ public class ClientDTO implements Serializable {
     @NotNull(message = "type cannot be null")
     private TypeClient type;
 
-    @Size(max = 2, min = 1, message = "Invalid size! Only fits 1 to 2 phones")
+    @Size(max = 2, message = "Only 2 phones per user!!")
     private List<PhoneDTO> phones = new ArrayList<>();
+
+    @Size(max = 3, message = "Only 3 addresses per user!!")
+    private List<AddressDTO> addresses = new ArrayList<>();
 
     public ClientDTO() {
     }
@@ -42,6 +48,7 @@ public class ClientDTO implements Serializable {
         this.register_Moment = entity.getRegister_Moment();
         this.type = entity.getType();
         this.phones = entity.getPhones().stream().map(x -> new PhoneDTO(x)).toList();
+        this.addresses = entity.getAddresses().stream().map(x -> new AddressDTO(x)).toList();
     }
 
     public Integer getId() {
@@ -100,16 +107,11 @@ public class ClientDTO implements Serializable {
         this.phones = phones;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ClientDTO clientDTO = (ClientDTO) o;
-        return Objects.equals(id, clientDTO.id);
+    public List<AddressDTO> getAddresses() {
+        return addresses;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
+    public void setAddresses(List<AddressDTO> address) {
+        this.addresses = address;
     }
 }

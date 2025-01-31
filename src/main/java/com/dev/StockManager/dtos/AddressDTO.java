@@ -1,38 +1,42 @@
-package com.dev.StockManager.entities;
+package com.dev.StockManager.dtos;
 
-import jakarta.persistence.*;
+import com.dev.StockManager.entities.Address;
+import com.dev.StockManager.entities.Client;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.Max;
 
-import java.io.Serializable;
-import java.util.Objects;
+public class AddressDTO {
 
-@Entity
-public class Address implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Integer id;
-    private String streetName; // nome da rua
+
+    @Max(100)
+    private String streetName;
+
+    @Max(150)
     private String complement;
 
-    private String neighborhoodName; // nome do bairro
+    @Max(100)
+    private String neighborhoodName;
     private Integer number;
+
+    @Max(8)
     private String cep;
 
-    @ManyToOne
-    @JoinColumn(name = "client", nullable = false)
+    @JsonIgnore
     private Client client;
 
-    public Address() {
+    public AddressDTO() {
     }
 
-    public Address(Integer id, String streetName, String complement, String neighborhoodName, Integer number, String cep, Client client) {
-        this.id = id;
-        this.streetName = streetName;
-        this.complement = complement;
-        this.neighborhoodName = neighborhoodName;
-        this.number = number;
-        this.cep = cep;
-        this.client = client;
+    public AddressDTO(Address entity) {
+        this.id = entity.getId();
+        this.streetName = entity.getStreetName();
+        this.complement = entity.getComplement();
+        this.neighborhoodName = entity.getNeighborhoodName();
+        this.number = entity.getNumber();
+        this.cep = entity.getCep();
+        this.client = entity.getClient();
     }
 
     public Integer getId() {
@@ -91,16 +95,5 @@ public class Address implements Serializable {
         this.client = client;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Address address = (Address) o;
-        return Objects.equals(id, address.id);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
 }

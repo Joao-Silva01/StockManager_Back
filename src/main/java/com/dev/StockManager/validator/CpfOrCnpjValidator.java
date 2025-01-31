@@ -9,7 +9,7 @@ public class CpfOrCnpjValidator {
 
     public static boolean CpfValidator(String cpf) {
 
-        if (cpf == null || cpf.length() != 11 || !cpf.matches("\\d{11}")) {
+        if (cpf == null || !cpf.matches("^[0-9]{11}$")) {
             throw new ValidatorException("Invalid CPF format!! " + cpf);
         }
 
@@ -22,7 +22,7 @@ public class CpfOrCnpjValidator {
 
     public static boolean CnpjValidator(String cnpj) {
 
-        if (cnpj == null || cnpj.length() != 14 || !cnpj.matches("\\d{14}")) {
+        if (cnpj == null || cnpj.length() != 14 || !cnpj.matches("^[0-9]{14}$")) {
             throw new ValidatorException("Invalid CNPJ format!! " + cnpj);
         }
 

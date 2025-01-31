@@ -3,12 +3,9 @@ package com.dev.StockManager.dtos;
 import com.dev.StockManager.entities.Client;
 import com.dev.StockManager.entities.Phone;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 public class PhoneDTO implements Serializable {
 
@@ -53,16 +50,5 @@ public class PhoneDTO implements Serializable {
         this.clientId = clientId;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PhoneDTO phoneDTO = (PhoneDTO) o;
-        return Objects.equals(id, phoneDTO.id);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
 }

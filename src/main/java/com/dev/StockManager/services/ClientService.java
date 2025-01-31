@@ -2,6 +2,7 @@ package com.dev.StockManager.services;
 
 import com.dev.StockManager.dtos.ClientDTO;
 import com.dev.StockManager.dtos.PhoneDTO;
+import com.dev.StockManager.entities.Address;
 import com.dev.StockManager.entities.Client;
 import com.dev.StockManager.entities.Phone;
 import com.dev.StockManager.entities.enums.TypeClient;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,6 +38,7 @@ public class ClientService {
     public ClientDTO findById(int id) {
         Client client = clientRepository.findById(id)
                 .orElseThrow(() -> new IdNotFoundException("Client id not found"));
+        ClientDTO ctDTO = new ClientDTO(client);
         return new ClientDTO(client);
     }
 
@@ -56,10 +59,13 @@ public class ClientService {
 
         Client client1 = new Client(entity.getId(), entity.getName().strip(), entity.getCpf_Or_Cnpj().strip(), entity.getEmail().strip(),
                 Timestamp.from(Instant.now()), entity.getType());
-        List<Phone> p = new ArrayList<>();
-        p.addAll(entity.getPhones().stream().map(x -> new Phone(null, x.getNumber(), client1)).toList());
+        List<Phone> phones = new ArrayList<>(entity.getPhones().stream().map(x -> new Phone(null, x.getNumber(), client1)).toList());
 
-        client1.setPhones(p);
+        List<Address> addresses = new ArrayList<>(entity.getAddresses().stream()
+                .map(x -> new Address(null,x.getStreetName(),x.getComplement(),x.getNeighborhoodName(),x.getNumber(),x.getCep(), client1)).toList());
+
+        client1.setPhones(phones);
+        client1.setAddresses(addresses);
         clientRepository.save(client1);
     }
 

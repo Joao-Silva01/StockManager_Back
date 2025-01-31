@@ -50,16 +50,5 @@ public class CategoryDTO implements Serializable {
         this.products = products;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CategoryDTO that = (CategoryDTO) o;
-        return Objects.equals(code, that.code);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(code);
-    }
 }

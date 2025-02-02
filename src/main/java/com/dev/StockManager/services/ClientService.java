@@ -92,14 +92,12 @@ public class ClientService {
         Client ct = clientRepository.findById(clientId).orElseThrow(() -> new IdNotFoundException("Client not found!"));
         Phone p = new Phone();
 
-        if (indexPhone == 0) {
-            p = phoneRepository.findById(ct.getPhones().getFirst().getId()).get();
-            p.setNumber(phone.getNumber());
-            ct.getPhones().addFirst(p);
-        } else if (indexPhone == 1) {
-            p = phoneRepository.findById(ct.getPhones().get(1).getId()).get();
-            p.setNumber(phone.getNumber());
-            ct.getPhones().add(1, p);
+        for (int i = 0; i < 2; i++) {
+            if (indexPhone == i){
+                p = phoneRepository.findById(ct.getPhones().get(i).getId()).get();
+                p.setNumber(phone.getNumber());
+                ct.getPhones().add(i, p);
+            }
         }
 
         phoneRepository.save(p);

@@ -67,7 +67,7 @@ public class ClientService {
         List<Phone> phones = new ArrayList<>(entity.getPhones().stream().map(x -> new Phone(null, x.getNumber(), client1)).toList());
 
         List<Address> addresses = new ArrayList<>(entity.getAddresses().stream()
-                .map(x -> new Address(null,x.getStreetName(),x.getComplement(),x.getNeighborhoodName(),x.getNumber(),x.getCep(), client1)).toList());
+                .map(x -> new Address(null, x.getStreetName(), x.getComplement(), x.getNeighborhoodName(), x.getNumber(), x.getCep(), client1)).toList());
 
         client1.setPhones(phones);
         client1.setAddresses(addresses);
@@ -106,33 +106,19 @@ public class ClientService {
         clientRepository.save(ct);
     }
 
-    public void updateClientAddress(Integer clientId, Integer indexAddress, AddressDTO address){
+    public void updateClientAddress(Integer clientId, Integer indexAddress, AddressDTO address) {
         Client ct = clientRepository.findById(clientId).orElseThrow(() -> new IdNotFoundException("Client not found!"));
-        Address addr;
+        Address addr = new Address();
 
-        if (indexAddress == 0) {
-            addr = addressRepository.findById(ct.getAddresses().getFirst().getId()).get();
-
-            addr.setStreetName(address.getStreetName());
-            addr.setComplement(address.getComplement());
-            addr.setNeighborhoodName(address.getNeighborhoodName());
-            addr.setNumber(address.getNumber());
-            addr.setCep(address.getCep());
-
-        } else if (indexAddress == 1) {
-            addr = addressRepository.findById(ct.getAddresses().get(1).getId()).get();
-            addr.setStreetName(address.getStreetName());
-            addr.setComplement(address.getComplement());
-            addr.setNeighborhoodName(address.getNeighborhoodName());
-            addr.setNumber(address.getNumber());
-            addr.setCep(address.getCep());
-        } else{
-            addr = addressRepository.findById(ct.getAddresses().get(2).getId()).get();
-            addr.setStreetName(address.getStreetName());
-            addr.setComplement(address.getComplement());
-            addr.setNeighborhoodName(address.getNeighborhoodName());
-            addr.setNumber(address.getNumber());
-            addr.setCep(address.getCep());
+        for (int i = 0; i < 3; i++) {
+            if (indexAddress == i) {
+                addr = addressRepository.findById(ct.getAddresses().get(i).getId()).get();
+                addr.setStreetName(address.getStreetName());
+                addr.setComplement(address.getComplement());
+                addr.setNeighborhoodName(address.getNeighborhoodName());
+                addr.setNumber(address.getNumber());
+                addr.setCep(address.getCep());
+            }
         }
 
         addressRepository.save(addr);

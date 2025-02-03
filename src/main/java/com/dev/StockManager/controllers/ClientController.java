@@ -3,7 +3,9 @@ package com.dev.StockManager.controllers;
 import com.dev.StockManager.dtos.AddressDTO;
 import com.dev.StockManager.dtos.ClientDTO;
 import com.dev.StockManager.dtos.PhoneDTO;
+import com.dev.StockManager.dtos.SalesOrderDTO;
 import com.dev.StockManager.services.ClientService;
+import com.dev.StockManager.services.SalesOrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,9 @@ public class ClientController {
 
     @Autowired
     private ClientService clientService;
+
+    @Autowired
+    private SalesOrderService salesService;
 
     @GetMapping
     public ResponseEntity<List<ClientDTO>> findAll (){
@@ -50,5 +55,10 @@ public class ClientController {
     public ResponseEntity<PhoneDTO> updateAddress(@PathVariable Integer clientId, @PathVariable Integer indexAddress,@Valid @RequestBody AddressDTO address){
         clientService.updateClientAddress(clientId,indexAddress,address);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/{clientId}/orders")
+    public ResponseEntity<List<SalesOrderDTO>> find (@PathVariable Integer clientId){
+        return ResponseEntity.ok().body(salesService.allCustomerOrders(clientId));
     }
 }

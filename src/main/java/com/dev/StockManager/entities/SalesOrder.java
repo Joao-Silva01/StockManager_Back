@@ -29,9 +29,17 @@ public class SalesOrder implements Serializable {
     @Enumerated(EnumType.ORDINAL)
     private SalesOrderStatus status;
 
+    @ManyToOne
+    @JoinColumn(name = "delivery_address")
+    private Address deliveryAddress;
+
+    @ManyToOne
+    @JoinColumn(name = "phone")
+    private Phone phone;
+
     @JsonIgnore
     @OneToMany(mappedBy = "ps_id.salesOrder")
-    private List<SalesOrderProduct> itens = new ArrayList<>();
+    private List<SalesOrderProduct> products = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -40,12 +48,15 @@ public class SalesOrder implements Serializable {
     public SalesOrder() {
     }
 
-    public SalesOrder(Integer id, Double priceTotal, Timestamp dateMoment, SalesOrderStatus status, Client client) {
+    public SalesOrder(Integer id, Double priceTotal, Timestamp dateMoment, SalesOrderStatus status,
+                      Address deliveryAddress, Phone phone, Client clientId) {
         this.id = id;
         this.priceTotal = priceTotal;
         this.dateMoment = dateMoment;
         this.status = status;
-        this.clientId = client;
+        this.deliveryAddress = deliveryAddress;
+        this.phone = phone;
+        this.clientId = clientId;
     }
 
     public Integer getId() {
@@ -80,12 +91,12 @@ public class SalesOrder implements Serializable {
         this.status = status;
     }
 
-    public List<SalesOrderProduct> getItens() {
-        return itens;
+    public List<SalesOrderProduct> getProducts() {
+        return products;
     }
 
-    public void setItens(List<SalesOrderProduct> itens) {
-        this.itens = itens;
+    public void setProducts(List<SalesOrderProduct> products) {
+        this.products = products;
     }
 
     public Client getClientId() {
@@ -94,6 +105,22 @@ public class SalesOrder implements Serializable {
 
     public void setClientId(Client clientId) {
         this.clientId = clientId;
+    }
+
+    public Address getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(Address deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
+    public Phone getPhone() {
+        return phone;
+    }
+
+    public void setPhone(Phone phone) {
+        this.phone = phone;
     }
 
     @Override

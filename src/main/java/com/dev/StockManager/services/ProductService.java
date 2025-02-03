@@ -1,9 +1,7 @@
 package com.dev.StockManager.services;
 
-import com.dev.StockManager.dtos.ClientDTO;
 import com.dev.StockManager.dtos.ProductDTO;
 import com.dev.StockManager.entities.Category;
-import com.dev.StockManager.entities.Client;
 import com.dev.StockManager.entities.Product;
 import com.dev.StockManager.entities.ProductStock;
 import com.dev.StockManager.exceptions.IdNotFoundException;

@@ -1,13 +1,8 @@
 package com.dev.StockManager.dtos;
 
-import com.dev.StockManager.entities.Phone;
-import com.dev.StockManager.entities.Product;
-import com.dev.StockManager.entities.ProductStock;
 import jakarta.validation.constraints.*;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Objects;
 
 public class ProductDTO implements Serializable {
 

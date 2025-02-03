@@ -1,48 +1,44 @@
 package com.dev.StockManager.dtos;
 
-import com.dev.StockManager.entities.Client;
+import com.dev.StockManager.dtos.client.ClientShortDTO;
 import com.dev.StockManager.entities.SalesOrder;
-import com.dev.StockManager.entities.SalesOrderProduct;
 import com.dev.StockManager.entities.enums.SalesOrderStatus;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import com.dev.StockManager.mapper.ClientMapper;
+import com.dev.StockManager.mapper.SalesOrderMapper;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SalesOrderDTO implements Serializable {
+
     private Integer id;
 
+    private ClientShortDTO clientId;
+
+    private AddressDTO deliveryAddress;
+
+    private PhoneDTO phone;
+
+    private List<ProductDTO> itens;
 
     private Double priceTotal;
 
-
     private Timestamp dateMoment;
-
 
     private SalesOrderStatus status;
 
-    private List<ProductDTO> itens = new ArrayList<>();
-
-    @JsonIgnore
-    private Client clientId;
+    public SalesOrderDTO(){}
 
     public SalesOrderDTO(SalesOrder order) {
         this.id = order.getId();
         this.priceTotal = order.getPriceTotal();
         this.dateMoment = order.getDateMoment();
         this.status = order.getStatus();
-        this.clientId = order.getClientId();
-        this.itens =  order.getItens().stream()
-                .map(x ->
-                        new ProductDTO(x.getProduct().getId(),x.getProduct().getName(),
-                                x.getProduct().getDescription(), x.getPrice(),
-                                x.getProduct().getCategory_id().getCode(),x.getQuantity()))
-                .toList();
+        this.deliveryAddress = SalesOrderMapper.addressConversion(order);
+        this.phone = SalesOrderMapper.phoneConversion(order);
+        this.clientId = ClientMapper.simpleDataConversion(order.getClientId()); // realiza a conversão do Client pro ClientShortDTO
+        this.itens = SalesOrderMapper.itensConversion(order);
     }
 
     public Integer getId() {
@@ -56,7 +52,7 @@ public class SalesOrderDTO implements Serializable {
 
     public Double getPriceTotal() {
         double total = 0;
-        for (ProductDTO p : itens){
+        for (ProductDTO p : itens) {
             total += p.getPrice() * p.getQuantity();
         }
         return total;
@@ -90,12 +86,27 @@ public class SalesOrderDTO implements Serializable {
         this.itens = itens;
     }
 
-    public Client getClientId() {
+    public ClientShortDTO getClientId() {
         return clientId;
     }
 
-    public void setClientId(Client clientId) {
+    public void setClientId(ClientShortDTO clientId) {
         this.clientId = clientId;
     }
 
+    public AddressDTO getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(AddressDTO deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
+    public PhoneDTO getPhone() {
+        return phone;
+    }
+
+    public void setPhone(PhoneDTO phone) {
+        this.phone = phone;
+    }
 }

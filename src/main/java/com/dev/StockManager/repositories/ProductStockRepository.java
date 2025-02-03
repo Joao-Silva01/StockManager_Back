@@ -1,12 +1,9 @@
 package com.dev.StockManager.repositories;
 
-import com.dev.StockManager.dtos.ProductDTO;
 import com.dev.StockManager.entities.ProductStock;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface ProductStockRepository extends JpaRepository<ProductStock,Integer> {

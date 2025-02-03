@@ -16,12 +16,12 @@ public class SalesOrderProduct {
     private ProductAndSalesOrderPK ps_id = new ProductAndSalesOrderPK();
 
     private Integer quantity;
-    private BigDecimal price;
+    private Double price;
 
     public SalesOrderProduct() {
     }
 
-    public SalesOrderProduct(Product product, SalesOrder salesOrder, Integer quantity, BigDecimal price) {
+    public SalesOrderProduct(Product product, SalesOrder salesOrder, Integer quantity, Double price) {
         ps_id.setProduct(product);
         ps_id.setSalesOrder(salesOrder);
         this.quantity = quantity;
@@ -51,11 +51,11 @@ public class SalesOrderProduct {
         this.quantity = quantity;
     }
 
-    public BigDecimal getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

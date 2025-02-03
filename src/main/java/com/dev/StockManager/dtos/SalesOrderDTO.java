@@ -4,18 +4,21 @@ import com.dev.StockManager.entities.Client;
 import com.dev.StockManager.entities.SalesOrder;
 import com.dev.StockManager.entities.SalesOrderProduct;
 import com.dev.StockManager.entities.enums.SalesOrderStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SalesOrderDTO {
+public class SalesOrderDTO implements Serializable {
     private Integer id;
 
-    private BigDecimal priceTotal;
+
+    private Double priceTotal;
 
 
     private Timestamp dateMoment;
@@ -50,11 +53,16 @@ public class SalesOrderDTO {
         this.id = id;
     }
 
-    public BigDecimal getPriceTotal() {
-        return priceTotal;
+
+    public Double getPriceTotal() {
+        double total = 0;
+        for (ProductDTO p : itens){
+            total += p.getPrice() * p.getQuantity();
+        }
+        return total;
     }
 
-    public void setPriceTotal(BigDecimal priceTotal) {
+    public void setPriceTotal(Double priceTotal) {
         this.priceTotal = priceTotal;
     }
 

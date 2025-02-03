@@ -1,6 +1,7 @@
 package com.dev.StockManager.entities;
 
 import com.dev.StockManager.entities.enums.SalesOrderStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -19,7 +20,8 @@ public class SalesOrder implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private BigDecimal priceTotal;
+
+    private Double priceTotal;
 
     @Column(name = "date_moment")
     private Timestamp dateMoment;
@@ -38,7 +40,7 @@ public class SalesOrder implements Serializable {
     public SalesOrder() {
     }
 
-    public SalesOrder(Integer id, BigDecimal priceTotal, Timestamp dateMoment, SalesOrderStatus status, Client client) {
+    public SalesOrder(Integer id, Double priceTotal, Timestamp dateMoment, SalesOrderStatus status, Client client) {
         this.id = id;
         this.priceTotal = priceTotal;
         this.dateMoment = dateMoment;
@@ -54,11 +56,11 @@ public class SalesOrder implements Serializable {
         this.id = id;
     }
 
-    public BigDecimal getPriceTotal() {
+    public Double getPriceTotal() {
         return priceTotal;
     }
 
-    public void setPriceTotal(BigDecimal priceTotal) {
+    public void setPriceTotal(Double priceTotal) {
         this.priceTotal = priceTotal;
     }
 

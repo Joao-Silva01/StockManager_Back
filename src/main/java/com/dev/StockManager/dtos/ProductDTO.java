@@ -19,7 +19,7 @@ public class ProductDTO implements Serializable {
 
     @NotNull(message = "Price cannot be null")
     @DecimalMin(value = "0.01", message = "price cannot be negative or equal to zero")
-    private BigDecimal price;
+    private Double price;
 
     @NotNull(message = "Category cannot be null")
     private Integer category;
@@ -31,7 +31,7 @@ public class ProductDTO implements Serializable {
     public ProductDTO() {
     }
 
-    public ProductDTO(Integer id, String name, String description, BigDecimal price, Integer category, Integer quantity) {
+    public ProductDTO(Integer id, String name, String description, Double price, Integer category, Integer quantity) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -65,11 +65,11 @@ public class ProductDTO implements Serializable {
         this.description = description;
     }
 
-    public BigDecimal getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

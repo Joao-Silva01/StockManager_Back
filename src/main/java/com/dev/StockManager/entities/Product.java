@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -23,6 +25,10 @@ public class Product implements Serializable {
     @ManyToOne
     @JoinColumn(name = "category_id",nullable = false)
     private Category category_id;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "ps_id.product")
+    private List<SalesOrderProduct> itens = new ArrayList<>();
 
     public Product(){}
 
@@ -72,6 +78,14 @@ public class Product implements Serializable {
 
     public void setCategory_id(Category category_id) {
         this.category_id = category_id;
+    }
+
+    public List<SalesOrderProduct> getItens() {
+        return itens;
+    }
+
+    public void setItens(List<SalesOrderProduct> itens) {
+        this.itens = itens;
     }
 
     @Override

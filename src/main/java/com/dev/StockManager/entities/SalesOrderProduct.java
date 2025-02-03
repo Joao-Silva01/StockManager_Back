@@ -13,7 +13,7 @@ import java.util.Objects;
 public class SalesOrderProduct {
 
     @EmbeddedId
-    private ProductAndSalesOrderPK ps_id;
+    private ProductAndSalesOrderPK ps_id = new ProductAndSalesOrderPK();
 
     private Integer quantity;
     private BigDecimal price;
@@ -26,6 +26,13 @@ public class SalesOrderProduct {
         ps_id.setSalesOrder(salesOrder);
         this.quantity = quantity;
         this.price = price;
+    }
+
+    public Product getProduct() {
+        return ps_id.getProduct();
+    }
+    public SalesOrder getSalesOrder() {
+        return ps_id.getSalesOrder();
     }
 
     public ProductAndSalesOrderPK getPs_id() {

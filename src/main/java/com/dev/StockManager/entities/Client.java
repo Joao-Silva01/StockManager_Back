@@ -31,6 +31,9 @@ public class Client  implements Serializable {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<Address> addresses = new ArrayList<>();
 
+    @OneToMany(mappedBy = "clientId", cascade = CascadeType.ALL)
+    private List<SalesOrder> salesOrders = new ArrayList<>();
+
     public Client(){}
 
     public Client(Integer id, String name, String cpf_Or_Cnpj, String email, Timestamp register_Moment, TypeClient type) {
@@ -104,6 +107,14 @@ public class Client  implements Serializable {
 
     public void setAddresses(List<Address> addresses) {
         this.addresses = addresses;
+    }
+
+    public List<SalesOrder> getSalesOrders() {
+        return salesOrders;
+    }
+
+    public void setSalesOrders(List<SalesOrder> salesOrders) {
+        this.salesOrders = salesOrders;
     }
 
     @Override

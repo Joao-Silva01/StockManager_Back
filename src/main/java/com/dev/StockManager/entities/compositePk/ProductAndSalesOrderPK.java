@@ -2,6 +2,7 @@ package com.dev.StockManager.entities.compositePk;
 
 import com.dev.StockManager.entities.Product;
 import com.dev.StockManager.entities.SalesOrder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -16,6 +17,7 @@ public class ProductAndSalesOrderPK implements Serializable {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "sales_order_id")
     private SalesOrder salesOrder;

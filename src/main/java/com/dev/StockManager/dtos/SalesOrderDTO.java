@@ -1,49 +1,45 @@
-package com.dev.StockManager.entities;
+package com.dev.StockManager.dtos;
 
+import com.dev.StockManager.entities.Client;
+import com.dev.StockManager.entities.SalesOrder;
+import com.dev.StockManager.entities.SalesOrderProduct;
 import com.dev.StockManager.entities.enums.SalesOrderStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-@Entity
-public class SalesOrder implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class SalesOrderDTO {
     private Integer id;
 
     private BigDecimal priceTotal;
 
-    @Column(name = "date_moment")
+
     private Timestamp dateMoment;
 
-    @Enumerated(EnumType.ORDINAL)
+
     private SalesOrderStatus status;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "ps_id.salesOrder")
-    private List<SalesOrderProduct> itens = new ArrayList<>();
+    private List<ProductDTO> itens = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "client_id")
+    @JsonIgnore
     private Client clientId;
 
-    public SalesOrder() {
-    }
-
-    public SalesOrder(Integer id, BigDecimal priceTotal, Timestamp dateMoment, SalesOrderStatus status, Client client) {
-        this.id = id;
-        this.priceTotal = priceTotal;
-        this.dateMoment = dateMoment;
-        this.status = status;
-        this.clientId = client;
+    public SalesOrderDTO(SalesOrder order) {
+        this.id = order.getId();
+        this.priceTotal = order.getPriceTotal();
+        this.dateMoment = order.getDateMoment();
+        this.status = order.getStatus();
+        this.clientId = order.getClientId();
+        this.itens =  order.getItens().stream()
+                .map(x ->
+                        new ProductDTO(x.getProduct().getId(),x.getProduct().getName(),
+                                x.getProduct().getDescription(), x.getPrice(),
+                                x.getProduct().getCategory_id().getCode(),x.getQuantity()))
+                .toList();
     }
 
     public Integer getId() {
@@ -78,11 +74,11 @@ public class SalesOrder implements Serializable {
         this.status = status;
     }
 
-    public List<SalesOrderProduct> getItens() {
+    public List<ProductDTO> getItens() {
         return itens;
     }
 
-    public void setItens(List<SalesOrderProduct> itens) {
+    public void setItens(List<ProductDTO> itens) {
         this.itens = itens;
     }
 
@@ -94,16 +90,4 @@ public class SalesOrder implements Serializable {
         this.clientId = clientId;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SalesOrder that = (SalesOrder) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
 }

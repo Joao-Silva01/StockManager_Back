@@ -29,6 +29,7 @@ public class SalesOrder implements Serializable {
     @Enumerated(EnumType.ORDINAL)
     private SalesOrderStatus status;
 
+
     @ManyToOne
     @JoinColumn(name = "delivery_address")
     private Address deliveryAddress;

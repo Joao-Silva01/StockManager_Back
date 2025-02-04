@@ -1,10 +1,15 @@
-package com.dev.StockManager.dtos;
+package com.dev.StockManager.dtos.sales;
 
+import com.dev.StockManager.converter.AddressConverter;
+import com.dev.StockManager.converter.PhoneConverter;
+import com.dev.StockManager.dtos.AddressDTO;
+import com.dev.StockManager.dtos.PhoneDTO;
+import com.dev.StockManager.dtos.product.ProductDTO;
 import com.dev.StockManager.dtos.client.ClientShortDTO;
 import com.dev.StockManager.entities.SalesOrder;
 import com.dev.StockManager.entities.enums.SalesOrderStatus;
-import com.dev.StockManager.mapper.ClientMapper;
-import com.dev.StockManager.mapper.SalesOrderMapper;
+import com.dev.StockManager.converter.ClientConverter;
+import com.dev.StockManager.converter.SalesOrderConverter;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -35,10 +40,10 @@ public class SalesOrderDTO implements Serializable {
         this.priceTotal = order.getPriceTotal();
         this.dateMoment = order.getDateMoment();
         this.status = order.getStatus();
-        this.deliveryAddress = SalesOrderMapper.addressConversion(order);
-        this.phone = SalesOrderMapper.phoneConversion(order);
-        this.clientId = ClientMapper.simpleDataConversion(order.getClientId()); // realiza a conversão do Client pro ClientShortDTO
-        this.itens = SalesOrderMapper.itensConversion(order);
+        this.deliveryAddress = AddressConverter.deliveryConversion(order);
+        this.phone = PhoneConverter.phoneSalesConversion(order);
+        this.clientId = ClientConverter.shortConversion(order.getClientId()); // realiza a conversão do Client pro ClientShortDTO
+        this.itens = SalesOrderConverter.itensOrderConversion(order);
     }
 
     public Integer getId() {

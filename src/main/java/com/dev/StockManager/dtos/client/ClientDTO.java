@@ -1,17 +1,15 @@
-package com.dev.StockManager.dtos;
+package com.dev.StockManager.dtos.client;
 
-import com.dev.StockManager.entities.Address;
+import com.dev.StockManager.dtos.AddressDTO;
+import com.dev.StockManager.dtos.PhoneDTO;
 import com.dev.StockManager.entities.Client;
-import com.dev.StockManager.entities.Phone;
 import com.dev.StockManager.entities.enums.TypeClient;
 import jakarta.validation.constraints.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 
 public class ClientDTO implements Serializable {
 

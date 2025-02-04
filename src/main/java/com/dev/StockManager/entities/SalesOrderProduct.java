@@ -1,6 +1,7 @@
 package com.dev.StockManager.entities;
 
 import com.dev.StockManager.entities.compositePk.ProductAndSalesOrderPK;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -21,16 +22,19 @@ public class SalesOrderProduct {
     public SalesOrderProduct() {
     }
 
-    public SalesOrderProduct(Product product, SalesOrder salesOrder, Integer quantity, Double price) {
+    public SalesOrderProduct(SalesOrder salesOrder,Product product, Integer quantity) {
         ps_id.setProduct(product);
         ps_id.setSalesOrder(salesOrder);
         this.quantity = quantity;
-        this.price = price;
+        this.price = product.getPrice();
     }
 
+    @JsonIgnore
     public Product getProduct() {
         return ps_id.getProduct();
     }
+
+    @JsonIgnore
     public SalesOrder getSalesOrder() {
         return ps_id.getSalesOrder();
     }

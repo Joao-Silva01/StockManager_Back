@@ -1,6 +1,5 @@
 package com.dev.StockManager.repositories;
 
-import com.dev.StockManager.dtos.SalesOrderDTO;
 import com.dev.StockManager.entities.SalesOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

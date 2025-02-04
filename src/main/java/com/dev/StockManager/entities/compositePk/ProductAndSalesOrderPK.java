@@ -17,7 +17,7 @@ public class ProductAndSalesOrderPK implements Serializable {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @JsonIgnore
+
     @ManyToOne
     @JoinColumn(name = "sales_order_id")
     private SalesOrder salesOrder;

@@ -1,7 +1,7 @@
 package com.dev.StockManager.controllers;
 
 
-import com.dev.StockManager.dtos.ProductDTO;
+import com.dev.StockManager.dtos.product.ProductDTO;
 import com.dev.StockManager.services.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

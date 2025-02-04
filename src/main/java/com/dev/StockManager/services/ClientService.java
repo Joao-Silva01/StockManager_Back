@@ -1,7 +1,7 @@
 package com.dev.StockManager.services;
 
 import com.dev.StockManager.dtos.AddressDTO;
-import com.dev.StockManager.dtos.ClientDTO;
+import com.dev.StockManager.dtos.client.ClientDTO;
 import com.dev.StockManager.dtos.PhoneDTO;
 import com.dev.StockManager.entities.Address;
 import com.dev.StockManager.entities.Client;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 

@@ -1,9 +1,9 @@
 package com.dev.StockManager.controllers;
 
 import com.dev.StockManager.dtos.AddressDTO;
-import com.dev.StockManager.dtos.ClientDTO;
+import com.dev.StockManager.dtos.client.ClientDTO;
 import com.dev.StockManager.dtos.PhoneDTO;
-import com.dev.StockManager.dtos.SalesOrderDTO;
+import com.dev.StockManager.dtos.sales.SalesOrderDTO;
 import com.dev.StockManager.services.ClientService;
 import com.dev.StockManager.services.SalesOrderService;
 import jakarta.validation.Valid;

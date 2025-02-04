@@ -1,14 +1,11 @@
 package com.dev.StockManager.controllers;
 
-import com.dev.StockManager.dtos.SalesOrderDTO;
-import com.dev.StockManager.entities.SalesOrder;
+import com.dev.StockManager.dtos.sales.CreateSalesOrderDTO;
+import com.dev.StockManager.dtos.sales.SalesOrderDTO;
 import com.dev.StockManager.services.SalesOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,6 +23,11 @@ public class SalesOrderController {
         return ResponseEntity.ok().body(list);
     }
 
+    @PostMapping(value = "/{clientId}")
+    public ResponseEntity<?> create (@PathVariable Integer clientId, @RequestBody CreateSalesOrderDTO body){
+        salesService.createOrder(clientId,body);
+        return ResponseEntity.ok().build();
+    }
 
 
 }

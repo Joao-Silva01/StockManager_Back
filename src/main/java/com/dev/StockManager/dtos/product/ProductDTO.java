@@ -1,4 +1,4 @@
-package com.dev.StockManager.dtos;
+package com.dev.StockManager.dtos.product;
 
 import jakarta.validation.constraints.*;
 

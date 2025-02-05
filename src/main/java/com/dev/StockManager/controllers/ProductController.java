@@ -17,14 +17,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/products")
-@Validated
 public class ProductController {
 
     @Autowired
     private ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<?>> findAll(){
+    public ResponseEntity<List<?>> findAll() {
         var list = productService.findAll();
 
         return ResponseEntity.ok().body(list);
@@ -32,21 +31,21 @@ public class ProductController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> findById(@PathVariable Integer id){
+    public ResponseEntity<?> findById(@PathVariable Integer id) {
         var entity = productService.findById(id);
         return ResponseEntity.ok().body(entity);
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody  ProductDTO entity){
+    public ResponseEntity<?> create(@RequestBody ProductDTO entity) {
         productService.Create(entity);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(entity.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<?> update(@PathVariable Integer id,@RequestBody ProductDTO entity){
-        productService.update(id,entity);
+    public ResponseEntity<?> update(@PathVariable Integer id, @Valid @RequestBody ProductDTO entity) {
+        productService.update(id, entity);
         return ResponseEntity.ok().build();
     }
 

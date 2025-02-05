@@ -2,7 +2,6 @@ package com.dev.StockManager.entities.compositePk;
 
 import com.dev.StockManager.entities.Product;
 import com.dev.StockManager.entities.SalesOrder;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;

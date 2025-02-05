@@ -13,7 +13,6 @@ public class Address implements Serializable {
     private Integer id;
     private String streetName; // nome da rua
     private String complement;
-
     private String neighborhoodName; // nome do bairro
     private Integer number;
     private String cep;

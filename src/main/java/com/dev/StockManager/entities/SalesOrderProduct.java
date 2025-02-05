@@ -1,19 +1,18 @@
 package com.dev.StockManager.entities;
 
 import com.dev.StockManager.entities.compositePk.ProductAndSalesOrderPK;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-import java.math.BigDecimal;
+
 import java.util.Objects;
 
 @Entity
 @Table(name = "Sales_Order_Product")
 public class SalesOrderProduct {
 
-    @EmbeddedId
+    @EmbeddedId // Chave primaria composta Product-SalesOrder
     private ProductAndSalesOrderPK ps_id = new ProductAndSalesOrderPK();
 
     private Integer quantity;
@@ -29,12 +28,12 @@ public class SalesOrderProduct {
         this.price = product.getPrice();
     }
 
-    @JsonIgnore
+
     public Product getProduct() {
         return ps_id.getProduct();
     }
 
-    @JsonIgnore
+
     public SalesOrder getSalesOrder() {
         return ps_id.getSalesOrder();
     }

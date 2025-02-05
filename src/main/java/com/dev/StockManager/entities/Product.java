@@ -17,22 +17,19 @@ public class Product implements Serializable {
     private Integer id;
     private String name;
     private String description;
-
-
     private Double price;
 
-    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "category_id",nullable = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category_id;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "ps_id.product")
     private List<SalesOrderProduct> orders = new ArrayList<>();
 
-    public Product(){}
+    public Product() {
+    }
 
-    public Product(Integer id,String name, String description, Double price, Category category_id) {
+    public Product(Integer id, String name, String description, Double price, Category category_id) {
         this.id = id;
         this.name = name;
         this.description = description;

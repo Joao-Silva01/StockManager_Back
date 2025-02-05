@@ -3,11 +3,9 @@ package com.dev.StockManager.entities;
 
 import com.dev.StockManager.entities.enums.TypeClient;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.*;
 
 @Entity

@@ -1,14 +1,10 @@
 package com.dev.StockManager.entities;
 
 import com.dev.StockManager.entities.enums.SalesOrderStatus;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -20,7 +16,6 @@ public class SalesOrder implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
     private Double priceTotal;
 
     @Column(name = "date_moment")
@@ -28,7 +23,6 @@ public class SalesOrder implements Serializable {
 
     @Enumerated(EnumType.ORDINAL)
     private SalesOrderStatus status;
-
 
     @ManyToOne
     @JoinColumn(name = "delivery_address")
@@ -38,7 +32,6 @@ public class SalesOrder implements Serializable {
     @JoinColumn(name = "phone")
     private Phone phone;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "ps_id.salesOrder")
     private List<SalesOrderProduct> products = new ArrayList<>();
 

@@ -1,7 +1,6 @@
 package com.dev.StockManager.entities;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cascade;
 
 import java.util.Objects;
 

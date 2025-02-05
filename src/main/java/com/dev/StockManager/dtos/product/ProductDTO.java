@@ -1,26 +1,15 @@
 package com.dev.StockManager.dtos.product;
 
-import jakarta.validation.constraints.*;
 
 import java.io.Serializable;
 
 public class ProductDTO implements Serializable {
 
     private Integer id;
-
-    @NotBlank(message = "Name cannot be null or empty")
     private String name;
     private String description;
-
-    @NotNull(message = "Price cannot be null")
-    @DecimalMin(value = "0.01", message = "price cannot be negative or equal to zero")
     private Double price;
-
-    @NotNull(message = "Category cannot be null")
     private Integer category;
-
-    @NotNull(message = "Quantity cannot be null")
-    @Min(value = 1, message = "Quantity cannot be negative or zero")
     private Integer quantity;
 
     public ProductDTO() {

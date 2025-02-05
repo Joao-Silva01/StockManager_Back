@@ -12,6 +12,7 @@ import com.dev.StockManager.exceptions.ValidatorException;
 import com.dev.StockManager.repositories.AddressRepository;
 import com.dev.StockManager.repositories.ClientRepository;
 import com.dev.StockManager.repositories.PhoneRepository;
+import com.dev.StockManager.validator.ClientValidator;
 import com.dev.StockManager.validator.CpfOrCnpjValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,19 +48,8 @@ public class ClientService {
     }
 
     public void create(ClientDTO entity) {
-        // Verificação do CPF
-        if (Objects.equals(entity.getType().getCode(), TypeClient.INDIVIDUAL_CLIENT.getCode())) {
-            boolean valid = CpfOrCnpjValidator.CpfValidator(entity.getCpf_Or_Cnpj());
-            if (!valid) {
-                throw new ValidatorException("Incorrect CPF!!");
-            }
-        } else // Verificação do CNPJ
-        {
-            boolean valid = CpfOrCnpjValidator.CnpjValidator(entity.getCpf_Or_Cnpj());
-            if (!valid) {
-                throw new ValidatorException("Incorrect CPF!!");
-            }
-        }
+
+        ClientValidator.validator(entity);
 
         Client client1 = new Client(entity.getId(), entity.getName().strip(), entity.getCpf_Or_Cnpj().strip(), entity.getEmail().strip(),
                 Timestamp.from(Instant.now()), entity.getType());

@@ -14,25 +14,13 @@ import java.util.List;
 public class ClientDTO implements Serializable {
 
     private Integer id;
-
-    @NotBlank(message = "name - cannot be null or empty")
     private String name;
-
-    @NotBlank(message = "cpf_Or_Cnpj - cannot be null or empty")
     private String cpf_Or_Cnpj;
-
-    @Pattern(regexp = "^[a-zA-Z0-9_-]+@[a-zA-Z]+[.][a-zA-Z]{3}$", message = "Incorrect email!!")
     private String email;
-
     private Timestamp register_Moment;
-
-    @NotNull(message = "type cannot be null")
     private TypeClient type;
 
-    @Size(max = 2, message = "Only 2 phones per user!!")
     private List<PhoneDTO> phones = new ArrayList<>();
-
-    @Size(max = 3, message = "Only 3 addresses per user!!")
     private List<AddressDTO> addresses = new ArrayList<>();
 
     public ClientDTO() {

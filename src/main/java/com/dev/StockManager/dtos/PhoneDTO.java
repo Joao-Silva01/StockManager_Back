@@ -11,9 +11,8 @@ public class PhoneDTO implements Serializable {
 
     @JsonIgnore
     private Integer id;
-
-    @Size(min = 11, max = 11, message = "The phone size must be 11 (with area code)")
     private String number;
+
     @JsonIgnore
     private Client clientId;
 

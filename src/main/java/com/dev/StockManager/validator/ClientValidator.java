@@ -7,7 +7,7 @@ import com.dev.StockManager.exceptions.ValidatorException;
 import java.util.Objects;
 
 public class ClientValidator {
-    public static boolean validator(ClientDTO client) {
+    public static void validator(ClientDTO client) {
 
         // verificação do name
         if (client.getName() == null) {
@@ -52,6 +52,5 @@ public class ClientValidator {
             throw new ValidatorException("Only 3 addresses per user!!");
         }
 
-        return true;
     }
 }

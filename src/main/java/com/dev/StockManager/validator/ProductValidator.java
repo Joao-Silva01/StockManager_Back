@@ -1,11 +1,10 @@
 package com.dev.StockManager.validator;
 
 import com.dev.StockManager.dtos.product.ProductDTO;
-import com.dev.StockManager.entities.Product;
 import com.dev.StockManager.exceptions.ValidatorException;
 
 public class ProductValidator {
-    public static boolean validator(ProductDTO product) {
+    public static void validator(ProductDTO product) {
 
         // verificação do name
         if (product.getName() == null) {
@@ -40,6 +39,6 @@ public class ProductValidator {
             throw new ValidatorException("Quantity cannot be negative or zero");
         }
 
-        return true;
+
     }
 }

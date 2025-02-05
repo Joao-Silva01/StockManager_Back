@@ -12,8 +12,10 @@ import com.dev.StockManager.exceptions.ValidatorException;
 import com.dev.StockManager.repositories.AddressRepository;
 import com.dev.StockManager.repositories.ClientRepository;
 import com.dev.StockManager.repositories.PhoneRepository;
+import com.dev.StockManager.validator.AddressValidator;
 import com.dev.StockManager.validator.ClientValidator;
 import com.dev.StockManager.validator.CpfOrCnpjValidator;
+import com.dev.StockManager.validator.PhoneValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,11 +51,18 @@ public class ClientService {
 
     public void create(ClientDTO entity) {
 
+        // Validações de entidades
         ClientValidator.validator(entity);
+        for(AddressDTO add : entity.getAddresses()){
+            AddressValidator.validator(add);
+        }
+        for(PhoneDTO pho : entity.getPhones()){
+            PhoneValidator.validator(pho);
+        }
 
         Client client1 = new Client(entity.getId(), entity.getName().strip(), entity.getCpf_Or_Cnpj().strip(), entity.getEmail().strip(),
                 Timestamp.from(Instant.now()), entity.getType());
-        List<Phone> phones = new ArrayList<>(entity.getPhones().stream().map(x -> new Phone(null, x.getNumber(), client1)).toList());
+        List<Phone> phones = new ArrayList<>(entity.getPhones().stream().map(x -> new Phone(null, x.getNumber().strip(), client1)).toList());
 
         List<Address> addresses = new ArrayList<>(entity.getAddresses().stream()
                 .map(x -> new Address(null, x.getStreetName(), x.getComplement(), x.getNeighborhoodName(), x.getNumber(), x.getCep(), client1)).toList());

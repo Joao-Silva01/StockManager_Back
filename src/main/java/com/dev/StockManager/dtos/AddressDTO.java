@@ -12,23 +12,10 @@ public class AddressDTO {
 
     @JsonIgnore
     private Integer id;
-
-    @NotBlank(message = "streetName - cannot be null or empty")
-    @Column(length = 100)
     private String streetName;
-
-    @Column(length = 150)
     private String complement;
-
-    @NotBlank(message = "neighborhoodName - cannot be null or empty")
-    @Column(length = 100)
     private String neighborhoodName;
-
-    @NotNull(message = "number - cannot be null")
     private Integer number;
-
-    @NotBlank(message = "cep - cannot be null or empty")
-    @Column(length = 8)
     private String cep;
 
     @JsonIgnore

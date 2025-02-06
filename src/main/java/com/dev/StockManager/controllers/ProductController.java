@@ -44,9 +44,15 @@ public class ProductController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<?> update(@PathVariable Integer id, @Valid @RequestBody ProductDTO entity) {
+    public ResponseEntity<?> update(@PathVariable Integer id,@RequestBody ProductDTO entity) {
         productService.update(id, entity);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
+        productService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 

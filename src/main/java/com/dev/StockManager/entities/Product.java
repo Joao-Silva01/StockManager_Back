@@ -26,6 +26,9 @@ public class Product implements Serializable {
     @OneToMany(mappedBy = "ps_id.product")
     private List<SalesOrderProduct> orders = new ArrayList<>();
 
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ProductStock productStock;
+
     public Product() {
     }
 
@@ -83,6 +86,14 @@ public class Product implements Serializable {
 
     public void setOrders(List<SalesOrderProduct> orders) {
         this.orders = orders;
+    }
+
+    public ProductStock getProductStock() {
+        return productStock;
+    }
+
+    public void setProductStock(ProductStock productStock) {
+        this.productStock = productStock;
     }
 
     @Override

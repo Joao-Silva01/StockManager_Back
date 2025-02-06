@@ -1,5 +1,6 @@
 package com.dev.StockManager.services;
 
+import com.dev.StockManager.converter.ProductConverter;
 import com.dev.StockManager.dtos.product.ProductDTO;
 import com.dev.StockManager.entities.Category;
 import com.dev.StockManager.entities.Product;
@@ -27,25 +28,24 @@ public class ProductService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public List<ProductDTO> findAll(){
+    public List<ProductDTO> findAll() {
 
         return productRepository.findAllQuantity();
     }
 
-    public ProductDTO findById(Integer id){
+    public ProductDTO findById(Integer id) {
         return productRepository.findProduct(id)
                 .orElseThrow(() -> new IdNotFoundException("Product not found"));
     }
 
     @Transactional
-    public void Create(ProductDTO productDTO){
+    public void Create(ProductDTO productDTO) {
         ProductValidator.validator(productDTO);
 
         Category category = categoryRepository.findById(productDTO.getCategory())
                 .orElseThrow(() -> new IdNotFoundException("Category not found!"));
 
-        Product product = new Product(null,productDTO.getName().strip(),productDTO.getDescription().strip(),
-                productDTO.getPrice(), category );
+        Product product = ProductConverter.toEntity(productDTO,category);
 
         productRepository.save(product);
 
@@ -55,24 +55,29 @@ public class ProductService {
 
     }
 
-    public void update(Integer id, ProductDTO productDTO){
+    @Transactional
+    public void update(Integer id, ProductDTO productDTO) {
         ProductDTO prDTO = findById(id);
 
-        // Atualizando campos não nulos
-        if (productDTO.getName() != null) prDTO.setName(productDTO.getName());
-        if (productDTO.getDescription() != null) prDTO.setDescription(productDTO.getDescription());
-        if (productDTO.getPrice() != null) prDTO.setPrice(productDTO.getPrice());
-        if(productDTO.getQuantity() != null) prDTO.setQuantity(productDTO.getQuantity());
+        ProductValidator.validatorUpdate(productDTO,prDTO);
 
-        Product pr = new Product(prDTO.getId(), prDTO.getName(), prDTO.getDescription(),
-                prDTO.getPrice(), categoryRepository.findById(prDTO.getCategory()).get());
+        Category category = categoryRepository.findById(prDTO.getCategory())
+                .orElseThrow(() -> new IdNotFoundException("Category not found!"));
+
+        Product pr1 = ProductConverter.toEntity(prDTO,category);
 
         ProductStock stock = productStockRepository.findProductStock(prDTO.getId());
         stock.setQuantity(prDTO.getQuantity());
 
-        productRepository.save(pr);
+        productRepository.save(pr1);
         productStockRepository.save(stock);
     }
+
+    public void delete(Integer id){
+        productRepository.deleteById(id);
+    }
+
+
 
 
 }

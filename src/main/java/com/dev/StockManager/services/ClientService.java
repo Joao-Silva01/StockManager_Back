@@ -1,5 +1,8 @@
 package com.dev.StockManager.services;
 
+import com.dev.StockManager.converter.AddressConverter;
+import com.dev.StockManager.converter.ClientConverter;
+import com.dev.StockManager.converter.PhoneConverter;
 import com.dev.StockManager.dtos.AddressDTO;
 import com.dev.StockManager.dtos.client.ClientDTO;
 import com.dev.StockManager.dtos.PhoneDTO;
@@ -12,6 +15,7 @@ import com.dev.StockManager.exceptions.ValidatorException;
 import com.dev.StockManager.repositories.AddressRepository;
 import com.dev.StockManager.repositories.ClientRepository;
 import com.dev.StockManager.repositories.PhoneRepository;
+import com.dev.StockManager.repositories.SalesOrderRepository;
 import com.dev.StockManager.validator.AddressValidator;
 import com.dev.StockManager.validator.ClientValidator;
 import com.dev.StockManager.validator.CpfOrCnpjValidator;
@@ -37,6 +41,9 @@ public class ClientService {
     @Autowired
     private AddressRepository addressRepository;
 
+    @Autowired
+    private SalesOrderRepository salesOrderRepository;
+
     public List<ClientDTO> findAll() {
         List<Client> list = clientRepository.findAll();
         return list.stream().map(ClientDTO::new).toList();
@@ -60,30 +67,27 @@ public class ClientService {
             PhoneValidator.validator(pho);
         }
 
-        Client client1 = new Client(entity.getId(), entity.getName().strip(), entity.getCpf_Or_Cnpj().strip(), entity.getEmail().strip(),
-                Timestamp.from(Instant.now()), entity.getType());
-        List<Phone> phones = new ArrayList<>(entity.getPhones().stream().map(x -> new Phone(null, x.getNumber().strip(), client1)).toList());
+        entity.setRegister_Moment(Timestamp.from(Instant.now()));
+        Client client2 = ClientConverter.toEntity(entity);
 
-        List<Address> addresses = new ArrayList<>(entity.getAddresses().stream()
-                .map(x -> new Address(null, x.getStreetName(), x.getComplement(), x.getNeighborhoodName(), x.getNumber(), x.getCep(), client1)).toList());
+        List<Phone> phones = PhoneConverter.toListDTO(entity.getPhones(),client2);
 
-        client1.setPhones(phones);
-        client1.setAddresses(addresses);
-        clientRepository.save(client1);
+        List<Address> addresses = AddressConverter.toListDTO(entity.getAddresses(), client2);
+
+        client2.setPhones(phones);
+        client2.setAddresses(addresses);
+        clientRepository.save(client2);
     }
 
+    // Endpoint que faz update de somente 3 campos
     public void update(Integer id, ClientDTO clientDTO) {
         ClientDTO ctDTO = findById(id);
 
-        // Atualizando campos não nulos
-        if (clientDTO.getName() != null) ctDTO.setName(clientDTO.getName());
-        if (clientDTO.getEmail() != null) ctDTO.setEmail(clientDTO.getEmail());
-        if (clientDTO.getCpf_Or_Cnpj() != null) ctDTO.setCpf_Or_Cnpj(clientDTO.getCpf_Or_Cnpj());
+        ClientValidator.validatorUpdate(ctDTO,clientDTO);
 
-        Client ct = new Client(ctDTO.getId(), ctDTO.getName(), ctDTO.getCpf_Or_Cnpj(),
-                ctDTO.getEmail(), ctDTO.getRegister_Moment(), ctDTO.getType());
+        Client ct1 = ClientConverter.toEntity(ctDTO);
 
-        clientRepository.save(ct);
+        clientRepository.save(ct1);
     }
 
     public void updateClientPhone(Integer clientId, Integer indexPhone, PhoneDTO phone) {
@@ -119,6 +123,10 @@ public class ClientService {
 
         addressRepository.save(addr);
         clientRepository.save(ct);
+    }
+
+    public void delete(Integer id){
+        clientRepository.deleteById(id);
     }
 
 

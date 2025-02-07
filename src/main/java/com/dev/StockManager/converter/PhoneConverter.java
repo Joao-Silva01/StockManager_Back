@@ -3,6 +3,7 @@ package com.dev.StockManager.converter;
 import com.dev.StockManager.dtos.AddressDTO;
 import com.dev.StockManager.dtos.PhoneDTO;
 import com.dev.StockManager.entities.Address;
+import com.dev.StockManager.entities.Client;
 import com.dev.StockManager.entities.Phone;
 import com.dev.StockManager.entities.SalesOrder;
 
@@ -24,11 +25,11 @@ public class PhoneConverter {
         return dto;
     }
 
-    public static List<Phone> toListDTO (List<PhoneDTO> dto){
+    public static List<Phone> toListDTO (List<PhoneDTO> dto, Client client){
         return dto.stream().map(x ->
                         new Phone(x.getId(),
-                                x.getNumber(),
-                                x.getClientId()))
+                                x.getNumber().strip(),
+                                client))
                 .toList();
     }
 }

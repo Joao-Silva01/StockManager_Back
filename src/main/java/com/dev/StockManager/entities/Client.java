@@ -23,13 +23,13 @@ public class Client  implements Serializable {
     @Enumerated(value = EnumType.ORDINAL)
     private TypeClient type;
 
-    @OneToMany(mappedBy = "clientId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "clientId",cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Phone> phones = new ArrayList<>();
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "client",cascade = CascadeType.REMOVE,orphanRemoval = true)
     private List<Address> addresses = new ArrayList<>();
 
-    @OneToMany(mappedBy = "clientId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "client",cascade = CascadeType.REMOVE)
     private List<SalesOrder> salesOrders = new ArrayList<>();
 
     public Client(){}

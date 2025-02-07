@@ -23,8 +23,7 @@ public class ClientValidator {
             if (!CpfOrCnpjValidator.CpfValidator(client.getCpf_Or_Cnpj().strip())) {
                 throw new ValidatorException("Incorrect CPF!!");
             }
-        } else
-        {
+        } else {
             if (!CpfOrCnpjValidator.CnpjValidator(client.getCpf_Or_Cnpj().strip())) {
                 throw new ValidatorException("Incorrect CNPJ!!");
             }
@@ -38,19 +37,48 @@ public class ClientValidator {
         }
 
         // Verificação do Type
-        if(client.getType() == null){
+        if (client.getType() == null) {
             throw new ValidatorException("Type cannot be null!");
         }
 
         // Verificação do tamanho maximo de telefones
-        if(client.getPhones().size() > 2){
+        if (client.getPhones().size() > 2) {
             throw new ValidatorException("Only 2 phones per user!!");
         }
 
         // Verificação do tamanho maximo de endereços
-        if(client.getAddresses().size() > 3){
+        if (client.getAddresses().size() > 3) {
             throw new ValidatorException("Only 3 addresses per user!!");
         }
 
+    }
+
+    public static void validatorUpdate(ClientDTO c1, ClientDTO c2) {
+        if (c2.getName() != null) {
+            if (c2.getName().strip().matches("^[a-zA-Z-]{1,100}$") || !c2.getName().isBlank()) {
+                c1.setName(c2.getName().strip());
+            } else {
+                throw new ValidatorException("Name cannot be empty and must contain only letters!!");
+            }
+        }
+        if (c2.getEmail() != null) {
+            if (c2.getEmail().strip().matches("^[a-zA-Z0-9_-]+@[a-zA-Z]+[.][a-zA-Z]{3}$")) {
+                c1.setEmail(c2.getEmail().strip());
+            } else {
+                throw new ValidatorException("Incorrect email!!");
+            }
+        }
+        if (c2.getCpf_Or_Cnpj() != null) {
+            if (Objects.equals(c1.getType().getCode(), TypeClient.INDIVIDUAL_CLIENT.getCode())) {
+                if (!CpfOrCnpjValidator.CpfValidator(c2.getCpf_Or_Cnpj().strip())) {
+                    throw new ValidatorException("Incorrect CPF!!");
+                }
+            } else {
+                if (!CpfOrCnpjValidator.CnpjValidator(c2.getCpf_Or_Cnpj().strip())) {
+                    throw new ValidatorException("Incorrect CNPJ!!");
+                }
+            }
+            c1.setCpf_Or_Cnpj(c2.getCpf_Or_Cnpj());
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.dev.StockManager.converter;
 
 import com.dev.StockManager.dtos.AddressDTO;
 import com.dev.StockManager.entities.Address;
+import com.dev.StockManager.entities.Client;
 import com.dev.StockManager.entities.SalesOrder;
 
 import java.util.List;
@@ -26,11 +27,11 @@ public class AddressConverter {
         return dto;
     }
 
-    public static List<Address> toListDTO (List<AddressDTO> dto){
+    public static List<Address> toListDTO (List<AddressDTO> dto, Client client){
         return dto.stream().map(x ->
                 new Address(x.getId(),x.getStreetName(),
                         x.getComplement(),x.getNeighborhoodName(),
-                        x.getNumber(),x.getCep(),x.getClient()))
+                        x.getNumber(),x.getCep(),client))
                 .toList();
     }
 

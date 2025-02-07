@@ -32,13 +32,14 @@ public class ClientConverter {
     public static Client toEntity(ClientDTO dto) {
         Client client = new Client();
         client.setId(dto.getId());
-        client.setEmail(dto.getEmail());
-        client.setName(dto.getName());
-        client.setCpf_Or_Cnpj(dto.getCpf_Or_Cnpj());
+        client.setEmail(dto.getEmail().strip());
+        client.setName(dto.getName().strip());
+        client.setCpf_Or_Cnpj(dto.getCpf_Or_Cnpj().strip());
         client.setRegister_Moment(dto.getRegister_Moment());
-        client.setType(client.getType());
-        client.setAddresses(AddressConverter.toListDTO(dto.getAddresses()));
-        client.setPhones(PhoneConverter.toListDTO(dto.getPhones()));
+        client.setType(dto.getType());
+
+        client.setAddresses(AddressConverter.toListDTO(dto.getAddresses(), client));
+        client.setPhones(PhoneConverter.toListDTO(dto.getPhones(),client));
 
         return client;
     }

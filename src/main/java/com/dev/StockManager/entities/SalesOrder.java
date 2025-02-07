@@ -3,6 +3,7 @@ package com.dev.StockManager.entities;
 import com.dev.StockManager.entities.enums.SalesOrderStatus;
 import jakarta.persistence.*;
 
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -36,8 +37,8 @@ public class SalesOrder implements Serializable {
     private List<SalesOrderProduct> products = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "client_id")
-    private Client clientId;
+    @JoinColumn(name = "client")
+    private Client client;
 
     public SalesOrder() {
     }
@@ -50,7 +51,7 @@ public class SalesOrder implements Serializable {
         this.status = status;
         this.deliveryAddress = deliveryAddress;
         this.phone = phone;
-        this.clientId = clientId;
+        this.client = clientId;
     }
 
     public Integer getId() {
@@ -94,11 +95,11 @@ public class SalesOrder implements Serializable {
     }
 
     public Client getClientId() {
-        return clientId;
+        return client;
     }
 
     public void setClientId(Client clientId) {
-        this.clientId = clientId;
+        this.client = clientId;
     }
 
     public Address getDeliveryAddress() {

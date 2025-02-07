@@ -10,7 +10,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -24,41 +26,50 @@ public class ClientController {
     private SalesOrderService salesService;
 
     @GetMapping
-    public ResponseEntity<List<ClientDTO>> findAll (){
+    public ResponseEntity<List<ClientDTO>> findAll() {
         return ResponseEntity.ok().body(clientService.findAll());
     }
 
     @GetMapping(value = "{id}")
-    public ResponseEntity<ClientDTO> findById(@PathVariable int id){
+    public ResponseEntity<ClientDTO> findById(@PathVariable int id) {
         return ResponseEntity.ok().body(clientService.findById(id));
     }
 
+    @GetMapping(value = "/{clientId}/orders")
+    public ResponseEntity<List<SalesOrderDTO>> find(@PathVariable Integer clientId) {
+        return ResponseEntity.ok().body(salesService.allCustomerOrders(clientId));
+    }
+
     @PostMapping
-    public ResponseEntity<ClientDTO> create( @RequestBody ClientDTO client){
+    public ResponseEntity<ClientDTO> create(@RequestBody ClientDTO client) {
         clientService.create(client);
-        return ResponseEntity.ok().build();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(client.getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<ClientDTO> update(@PathVariable Integer id, @RequestBody ClientDTO client){
-        clientService.update(id,client);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ClientDTO> update(@PathVariable Integer id, @RequestBody ClientDTO client) {
+        clientService.update(id, client);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping(value = "/{clientId}/phones/{phoneId}")
-    public ResponseEntity<PhoneDTO> updatePhone(@PathVariable Integer clientId, @PathVariable Integer phoneId,@Valid @RequestBody PhoneDTO phone){
-        clientService.updateClientPhone(clientId,phoneId,phone);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<PhoneDTO> updatePhone(@PathVariable Integer clientId, @PathVariable Integer phoneId, @RequestBody PhoneDTO phone) {
+        clientService.updateClientPhone(clientId, phoneId, phone);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping(value = "/{clientId}/addresses/{indexAddress}")
-    public ResponseEntity<PhoneDTO> updateAddress(@PathVariable Integer clientId, @PathVariable Integer indexAddress,@Valid @RequestBody AddressDTO address){
-        clientService.updateClientAddress(clientId,indexAddress,address);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<PhoneDTO> updateAddress(@PathVariable Integer clientId, @PathVariable Integer indexAddress, @RequestBody AddressDTO address) {
+        clientService.updateClientAddress(clientId, indexAddress, address);
+        return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/{clientId}/orders")
-    public ResponseEntity<List<SalesOrderDTO>> find (@PathVariable Integer clientId){
-        return ResponseEntity.ok().body(salesService.allCustomerOrders(clientId));
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
+        clientService.delete(id);
+        return ResponseEntity.noContent().build();
     }
+
+
 }

@@ -6,5 +6,5 @@ CREATE TABLE Address(
     number INTEGER NOT NULL,
     cep VARCHAR(8) NOT NULL,
     client INTEGER NOT NULL,
-    CONSTRAINT fk_clientIdAddress FOREIGN KEY (client) REFERENCES Client(id)
+    CONSTRAINT fk_clientIdAddress FOREIGN KEY (client) REFERENCES Client(id) ON DELETE CASCADE
 );

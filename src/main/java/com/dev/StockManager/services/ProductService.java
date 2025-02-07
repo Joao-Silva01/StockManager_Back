@@ -73,11 +73,4 @@ public class ProductService {
         productStockRepository.save(stock);
     }
 
-    public void delete(Integer id){
-        productRepository.deleteById(id);
-    }
-
-
-
-
 }

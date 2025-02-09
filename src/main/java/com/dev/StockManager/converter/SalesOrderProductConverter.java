@@ -8,6 +8,7 @@ import com.dev.StockManager.entities.SalesOrderProduct;
 import com.dev.StockManager.entities.compositePk.ProductAndSalesOrderPK;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,6 +34,8 @@ public class SalesOrderProductConverter {
         List<SalesOrderProduct> salesP = sales.getProducts();
 
         if (dto.getItens() != null) {
+
+            //Serve para atualizar os itens ja inseridos no pedido
             for (int i = 0; i < sales.getProducts().size(); i++) {
                 for (int j = 0; j < dto.getItens().size(); j++) {
 
@@ -42,33 +45,24 @@ public class SalesOrderProductConverter {
                 }
             }
 
+            // Serve para deixar na lista prod só os itens novos que vão ser adicionado
+            List<Product> prod = products.stream()
+                    .filter(s -> sales.getProducts().stream()
+                            .noneMatch(z -> z.getProduct().getId() == s.getId()))
+                    .toList();
 
-            List<Product> prod = new ArrayList<>(products);
 
-
-            for (int i = 0; i < sales.getProducts().size(); i++) {
-                for (int j = 0; j < dto.getItens().size(); j++) {
-
-                    var d = sales.getProducts().get(i).getProduct().getId();
-                    var w =dto.getItens().get(j).getId();
-
-                    if (sales.getProducts().get(i).getProduct().getId() == dto.getItens().get(j).getId()) {
-                        prod.remove(products.get(j));
-                    }
-                }
-            }
-
+            // Serve para adicionar no final da lista salesP os novos produtos
             for (int i = 0; i < products.size(); i++) {
-                for (int j = 0; j < prod.size(); j++) {
-
-
-                    if (prod.get(j).getId() == dto.getItens().get(i).getId()) {
-                        salesP.add(new SalesOrderProduct(sales, prod.get(j), dto.getItens().get(i).getQuantity()));
+                for (Product product : prod) {
+                    if (product.getId() == dto.getItens().get(i).getId()) {
+                        salesP.add(new SalesOrderProduct(sales, product, dto.getItens().get(i).getQuantity()));
                     }
                 }
             }
-        }
 
-        return salesP;
+
+        }
+        return salesP.stream().sorted(Comparator.comparingInt(s-> s.getProduct().getId())).toList();
     }
 }

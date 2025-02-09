@@ -6,9 +6,12 @@ import com.dev.StockManager.dtos.AddressDTO;
 import com.dev.StockManager.dtos.product.CreateShortProductAssociationDTO;
 import com.dev.StockManager.dtos.sales.CreateSalesOrderDTO;
 import com.dev.StockManager.dtos.sales.SalesOrderDTO;
+import com.dev.StockManager.dtos.sales.UpdateSalesOrderDTO;
 import com.dev.StockManager.entities.*;
+import com.dev.StockManager.entities.enums.SalesOrderStatus;
 import com.dev.StockManager.exceptions.IdNotFoundException;
 import com.dev.StockManager.repositories.*;
+import com.dev.StockManager.validator.SalesOrderValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -92,6 +95,28 @@ public class SalesOrderService {
 
         salesOrderProductRepository.saveAll(sop);
 
+    }
+
+    public void UpdateOrder(Integer orderId, UpdateSalesOrderDTO sales) {
+        SalesOrder order = salesOrderRepository.findById(orderId).orElseThrow(() -> new IdNotFoundException("Order not found"));
+        SalesOrderValidator.validatorStatus(order);
+
+        List<Product> products = new ArrayList<>();
+
+        if (sales.getItens() != null) {
+
+            for (CreateShortProductAssociationDTO cspa : sales.getItens()) {
+                products.add(productRepository.findById(cspa.getId()).get());
+            }
+        }
+
+        SalesOrder save = SalesOrderConverter.toUpdateEntity(order, sales);
+
+        salesOrderRepository.save(save);
+
+        List<SalesOrderProduct> sop = SalesOrderProductConverter.toUpdateEntity(sales, save, products);
+
+        salesOrderProductRepository.saveAll(sop);
     }
 
 

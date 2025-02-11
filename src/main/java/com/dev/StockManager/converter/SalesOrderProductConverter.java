@@ -39,7 +39,7 @@ public class SalesOrderProductConverter {
             for (int i = 0; i < sales.getProducts().size(); i++) {
                 for (int j = 0; j < dto.getItens().size(); j++) {
 
-                    if (sales.getProducts().get(i).getProduct().getId() == dto.getItens().get(j).getId()) {
+                    if (Objects.equals(sales.getProducts().get(i).getProduct().getId(), dto.getItens().get(j).getId())) {
                         salesP.set(i, new SalesOrderProduct(sales, products.get(j), dto.getItens().get(j).getQuantity()));
                     }
                 }
@@ -55,7 +55,7 @@ public class SalesOrderProductConverter {
             // Serve para adicionar no final da lista salesP os novos produtos
             for (int i = 0; i < products.size(); i++) {
                 for (Product product : prod) {
-                    if (product.getId() == dto.getItens().get(i).getId()) {
+                    if (Objects.equals(product.getId(), dto.getItens().get(i).getId())) {
                         salesP.add(new SalesOrderProduct(sales, product, dto.getItens().get(i).getQuantity()));
                     }
                 }

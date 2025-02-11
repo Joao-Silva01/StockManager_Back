@@ -10,8 +10,10 @@ import com.dev.StockManager.entities.SalesOrder;
 import com.dev.StockManager.entities.enums.SalesOrderStatus;
 import com.dev.StockManager.converter.ClientConverter;
 import com.dev.StockManager.converter.SalesOrderConverter;
+import jakarta.persistence.Column;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -27,7 +29,8 @@ public class SalesOrderDTO implements Serializable {
 
     private List<ProductDTO> itens;
 
-    private Double priceTotal;
+    @Column(scale = 10, precision = 2)
+    private BigDecimal priceTotal;
 
     private Timestamp dateMoment;
 
@@ -55,15 +58,11 @@ public class SalesOrderDTO implements Serializable {
     }
 
 
-    public Double getPriceTotal() {
-        double total = 0;
-        for (ProductDTO p : itens) {
-            total += p.getPrice() * p.getQuantity();
-        }
-        return total;
+    public BigDecimal getPriceTotal() {
+        return priceTotal;
     }
 
-    public void setPriceTotal(Double priceTotal) {
+    public void setPriceTotal(BigDecimal priceTotal) {
         this.priceTotal = priceTotal;
     }
 

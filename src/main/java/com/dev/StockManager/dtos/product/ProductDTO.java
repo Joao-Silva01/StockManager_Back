@@ -2,20 +2,21 @@ package com.dev.StockManager.dtos.product;
 
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class ProductDTO implements Serializable {
 
     private Integer id;
     private String name;
     private String description;
-    private Double price;
+    private BigDecimal price;
     private Integer category;
     private Integer quantity;
 
     public ProductDTO() {
     }
 
-    public ProductDTO(Integer id, String name, String description, Double price, Integer category, Integer quantity) {
+    public ProductDTO(Integer id, String name, String description, BigDecimal price, Integer category, Integer quantity) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -49,11 +50,11 @@ public class ProductDTO implements Serializable {
         this.description = description;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

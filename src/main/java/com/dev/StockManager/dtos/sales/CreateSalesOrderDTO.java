@@ -7,6 +7,7 @@ import com.dev.StockManager.entities.SalesOrder;
 import com.dev.StockManager.entities.enums.SalesOrderStatus;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -22,8 +23,6 @@ public class CreateSalesOrderDTO implements Serializable {
 
     private List<CreateShortProductAssociationDTO> itens;
 
-    private Double priceTotal;
-
     private Timestamp dateMoment;
 
     private SalesOrderStatus status;
@@ -32,7 +31,6 @@ public class CreateSalesOrderDTO implements Serializable {
 
     public CreateSalesOrderDTO(SalesOrder order,Integer clientid, Integer deliveryAddress, Integer phone) {
         this.id = order.getId();
-        this.priceTotal = order.getPriceTotal();
         this.dateMoment = order.getDateMoment();
         this.status = order.getStatus();
         this.deliveryAddress = deliveryAddress;
@@ -48,15 +46,6 @@ public class CreateSalesOrderDTO implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-
-    public Double getPriceTotal() {
-        return priceTotal;
-    }
-
-    public void setPriceTotal(Double priceTotal) {
-        this.priceTotal = priceTotal;
     }
 
     public Timestamp getDateMoment() {

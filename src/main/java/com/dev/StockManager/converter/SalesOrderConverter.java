@@ -7,6 +7,7 @@ import com.dev.StockManager.dtos.sales.UpdateSalesOrderDTO;
 import com.dev.StockManager.entities.*;
 import com.dev.StockManager.exceptions.IdNotFoundException;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -17,7 +18,6 @@ public class SalesOrderConverter {
     public static SalesOrder toCreateEntity(CreateSalesOrderDTO dto, Address address, Phone phone, Client client, List<Product> products) {
         SalesOrder so = new SalesOrder();
         so.setId(dto.getId());
-        so.setPriceTotal(dto.getPriceTotal());
         so.setDateMoment(dto.getDateMoment());
         so.setStatus(dto.getStatus());
         so.setDeliveryAddress(address);
@@ -33,8 +33,9 @@ public class SalesOrderConverter {
                 sop.add(new SalesOrderProduct(so, products.get(i), dto.getItens().get(i).getQuantity()));
             }
         }
-
         so.setProducts(sop);
+        so.calculateTotalPrice();
+
 
         return so;
     }

@@ -1,6 +1,6 @@
 CREATE TABLE Sales_Order(
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    price_total Double,
+    price_total DECIMAL(10,2),
     date_moment TIMESTAMP,
     status INTEGER,
     client INTEGER ,

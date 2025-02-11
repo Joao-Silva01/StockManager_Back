@@ -23,7 +23,7 @@ public class ProductValidator {
         // verificação do price
         if (product.getPrice() == null) {
             throw new ValidatorException("Price cannot be null");
-        } else if (product.getPrice() < 0.01) {
+        } else if (product.getPrice().doubleValue() < 0.01) {
             throw new ValidatorException("price cannot be negative or equal to zero");
         }
 
@@ -56,7 +56,7 @@ public class ProductValidator {
             }
         }
         if (product1.getPrice() != null) {
-            if (product1.getPrice() > 0.01) {
+            if (product1.getPrice().doubleValue() > 0.01) {
                 product2.setPrice(product1.getPrice());
             } else {
                 throw new ValidatorException("price cannot be negative or equal to zero");

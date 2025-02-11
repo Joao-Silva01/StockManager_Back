@@ -115,6 +115,10 @@ public class SalesOrderService {
         salesOrderRepository.save(save);
 
         List<SalesOrderProduct> sop = SalesOrderProductConverter.toUpdateEntity(sales, save, products);
+        save.setProducts(sop);
+
+        save.calculateTotalPrice();
+
 
         salesOrderProductRepository.saveAll(sop);
     }

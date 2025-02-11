@@ -1,10 +1,13 @@
 package com.dev.StockManager.entities;
 
+import com.dev.StockManager.dtos.product.CreateShortProductAssociationDTO;
+import com.dev.StockManager.dtos.product.ProductDTO;
 import com.dev.StockManager.entities.enums.SalesOrderStatus;
 import jakarta.persistence.*;
 
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +20,7 @@ public class SalesOrder implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Double priceTotal;
+    private BigDecimal priceTotal;
 
     @Column(name = "date_moment")
     private Timestamp dateMoment;
@@ -43,10 +46,9 @@ public class SalesOrder implements Serializable {
     public SalesOrder() {
     }
 
-    public SalesOrder(Integer id, Double priceTotal, Timestamp dateMoment, SalesOrderStatus status,
+    public SalesOrder(Integer id, Timestamp dateMoment, SalesOrderStatus status,
                       Address deliveryAddress, Phone phone, Client clientId) {
         this.id = id;
-        this.priceTotal = priceTotal;
         this.dateMoment = dateMoment;
         this.status = status;
         this.deliveryAddress = deliveryAddress;
@@ -62,11 +64,11 @@ public class SalesOrder implements Serializable {
         this.id = id;
     }
 
-    public Double getPriceTotal() {
+    public BigDecimal getPriceTotal() {
         return priceTotal;
     }
 
-    public void setPriceTotal(Double priceTotal) {
+    public void setPriceTotal(BigDecimal priceTotal) {
         this.priceTotal = priceTotal;
     }
 
@@ -116,6 +118,13 @@ public class SalesOrder implements Serializable {
 
     public void setPhone(Phone phone) {
         this.phone = phone;
+    }
+
+    public void calculateTotalPrice() {
+        priceTotal = new BigDecimal(0.00);
+        for (SalesOrderProduct product : products) {
+            priceTotal = BigDecimal.valueOf(priceTotal.doubleValue() + product.getPrice().doubleValue() * product.getQuantity());
+        }
     }
 
     @Override

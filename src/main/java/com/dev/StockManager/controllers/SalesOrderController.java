@@ -31,7 +31,13 @@ public class SalesOrderController {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody SalesOrderShortDTO dto){
-        salesService.UpdateOrder(id, dto);
+        salesService.updateOrder(id, dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping(value = "/{orderId}")
+    public ResponseEntity<?> delete(@PathVariable Integer orderId){
+        salesService.deleteOrder(orderId);
         return ResponseEntity.ok().build();
     }
 

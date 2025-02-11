@@ -51,8 +51,8 @@ public class ClientService {
 
     public ClientDTO findById(int id) {
         Client client = clientRepository.findById(id)
-                .orElseThrow(() -> new IdNotFoundException("Client id not found"));
-        ClientDTO ctDTO = new ClientDTO(client);
+                .orElseThrow(() -> new IdNotFoundException("Client not found"));
+
         return new ClientDTO(client);
     }
 
@@ -126,6 +126,7 @@ public class ClientService {
     }
 
     public void delete(Integer id){
+        clientRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Client not found"));
         clientRepository.deleteById(id);
     }
 

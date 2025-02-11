@@ -38,21 +38,18 @@ public class SalesOrderService {
 
     public List<SalesOrderDTO> allOrders() {
         List<SalesOrder> list = salesOrderRepository.findAll();
-        List<SalesOrderDTO> listDTO = list.stream().map(x -> new SalesOrderDTO(x)).toList();
-        return listDTO;
+
+        return list.stream().map(x -> new SalesOrderDTO(x)).toList();
     }
 
     public List<SalesOrderDTO> allCustomerOrders(Integer clientId) {
         clientRepository.findById(clientId).orElseThrow(() -> new IdNotFoundException("Client id not found"));
-
         List<SalesOrder> sales = salesOrderRepository.findA(clientId);
-        List<SalesOrderDTO> dto = sales.stream().map(x -> new SalesOrderDTO(x)).toList();
-        return dto;
+
+        return sales.stream().map(x -> new SalesOrderDTO(x)).toList();
     }
 
     public void createOrder(Integer clientId, SalesOrderShortDTO order) {
-
-
         // Pegando os dados do banco de dados para validar
         Client client = clientRepository.findById(clientId).orElseThrow(() -> new IdNotFoundException("Client id not found"));
 
@@ -72,7 +69,7 @@ public class SalesOrderService {
 
     }
 
-    public void UpdateOrder(Integer orderId, SalesOrderShortDTO sales) {
+    public void updateOrder(Integer orderId, SalesOrderShortDTO sales) {
         SalesOrder order = salesOrderRepository.findById(orderId).orElseThrow(() -> new IdNotFoundException("Order not found"));
         SalesOrderValidator.statusValidator(order);
         SalesOrderValidator.updateOrderValidator(sales, order.getClientId());
@@ -93,6 +90,11 @@ public class SalesOrderService {
 
 
         salesOrderProductRepository.saveAll(sop);
+    }
+
+    public void deleteOrder(Integer orderId){
+        salesOrderRepository.findById(orderId).orElseThrow(() -> new IdNotFoundException("Order not found"));
+        salesOrderRepository.deleteById(orderId);
     }
 
 

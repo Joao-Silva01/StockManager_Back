@@ -1,11 +1,9 @@
 package com.dev.StockManager.converter;
 
-import com.dev.StockManager.dtos.sales.CreateSalesOrderDTO;
-import com.dev.StockManager.dtos.sales.UpdateSalesOrderDTO;
+import com.dev.StockManager.dtos.sales.SalesOrderShortDTO;
 import com.dev.StockManager.entities.Product;
 import com.dev.StockManager.entities.SalesOrder;
 import com.dev.StockManager.entities.SalesOrderProduct;
-import com.dev.StockManager.entities.compositePk.ProductAndSalesOrderPK;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -15,7 +13,7 @@ import java.util.Objects;
 public class SalesOrderProductConverter {
 
     // Usado para juntar alguns dados específicos e retornar uma lista
-    public static List<SalesOrderProduct> toCreateEntity(CreateSalesOrderDTO dto, SalesOrder sales, List<Product> products) {
+    public static List<SalesOrderProduct> toCreateEntity(SalesOrderShortDTO dto, SalesOrder sales, List<Product> products) {
         List<SalesOrderProduct> salesP = new ArrayList<>();
 
         for (int i = 0; i < products.size(); i++) {
@@ -30,7 +28,7 @@ public class SalesOrderProductConverter {
         return salesP;
     }
 
-    public static List<SalesOrderProduct> toUpdateEntity(UpdateSalesOrderDTO dto, SalesOrder sales, List<Product> products) {
+    public static List<SalesOrderProduct> toUpdateEntity(SalesOrderShortDTO dto, SalesOrder sales, List<Product> products) {
         List<SalesOrderProduct> salesP = sales.getProducts();
 
         if (dto.getItens() != null) {

@@ -1,28 +1,28 @@
 package com.dev.StockManager.converter;
 
 import com.dev.StockManager.dtos.product.ProductDTO;
-import com.dev.StockManager.dtos.sales.CreateSalesOrderDTO;
-import com.dev.StockManager.dtos.sales.SalesOrderDTO;
-import com.dev.StockManager.dtos.sales.UpdateSalesOrderDTO;
+import com.dev.StockManager.dtos.sales.SalesOrderShortDTO;
 import com.dev.StockManager.entities.*;
+import com.dev.StockManager.entities.enums.SalesOrderStatus;
 import com.dev.StockManager.exceptions.IdNotFoundException;
 
-import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 public class SalesOrderConverter {
 
-    public static SalesOrder toCreateEntity(CreateSalesOrderDTO dto, Address address, Phone phone, Client client, List<Product> products) {
+    public static SalesOrder toCreateEntity(SalesOrderShortDTO dto, Address address, Phone phone, Client client, List<Product> products) {
         SalesOrder so = new SalesOrder();
-        so.setId(dto.getId());
-        so.setDateMoment(dto.getDateMoment());
-        so.setStatus(dto.getStatus());
         so.setDeliveryAddress(address);
         so.setPhone(phone);
+
+        // são associados automaticamente
         so.setClientId(client);
+        so.setDateMoment(Timestamp.from(Instant.now()));
+        so.setStatus(SalesOrderStatus.PEDING);
 
         // Associa os dados do produto de maneira correta
         List<SalesOrderProduct> sop = new ArrayList<>();
@@ -40,14 +40,9 @@ public class SalesOrderConverter {
         return so;
     }
 
-    public static SalesOrder toUpdateEntity(SalesOrder order, UpdateSalesOrderDTO dto) {
+    public static SalesOrder toUpdateEntity(SalesOrder order, SalesOrderShortDTO dto) {
         // Posso mudar o endereço de entrega, telefone e o itens
-
-
         if (dto.getDeliveryAddress() != null) {
-            if (dto.getDeliveryAddress() > order.getClientId().getAddresses().size() - 1) {
-                throw new IdNotFoundException("Address not found");
-            }
             for (int i = 0; i < order.getClientId().getAddresses().size(); i++) {
                 if (dto.getDeliveryAddress() == i) {
                     order.setDeliveryAddress(order.getClientId().getAddresses().get(dto.getDeliveryAddress()));
@@ -55,11 +50,6 @@ public class SalesOrderConverter {
             }
         }
         if (dto.getPhone() != null) {
-
-            if (dto.getPhone() > order.getClientId().getPhones().size() - 1) {
-                throw new IdNotFoundException("Phone not found");
-            }
-
             for (int i = 0; i < order.getClientId().getPhones().size(); i++) {
                 if (dto.getPhone() == i) {
                     order.setPhone(order.getClientId().getPhones().get(dto.getPhone()));
@@ -80,4 +70,29 @@ public class SalesOrderConverter {
                 .toList();
     }
 
+    public static Address deliveryAddressAssociationConverter(SalesOrderShortDTO order, Client client) {
+        Address address = new Address();
+
+        for (int i = 0; i < client.getAddresses().size(); i++) {
+            if (order.getDeliveryAddress() == i) {
+                address = client.getAddresses().get(order.getDeliveryAddress());
+                break;
+            }
+        }
+
+        return address;
+    }
+
+    public static Phone phoneAssociationConverter(SalesOrderShortDTO order, Client client) {
+        Phone phone = new Phone();
+
+        for (int i = 0; i < client.getPhones().size(); i++) {
+            if (order.getPhone() == i) {
+                phone = client.getPhones().get(order.getPhone());
+                break;
+            }
+        }
+
+        return phone;
+    }
 }

@@ -1,8 +1,7 @@
 package com.dev.StockManager.controllers;
 
-import com.dev.StockManager.dtos.sales.CreateSalesOrderDTO;
+import com.dev.StockManager.dtos.sales.SalesOrderShortDTO;
 import com.dev.StockManager.dtos.sales.SalesOrderDTO;
-import com.dev.StockManager.dtos.sales.UpdateSalesOrderDTO;
 import com.dev.StockManager.services.SalesOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +24,13 @@ public class SalesOrderController {
     }
 
     @PostMapping(value = "/{clientId}")
-    public ResponseEntity<?> create (@PathVariable Integer clientId, @RequestBody CreateSalesOrderDTO body){
+    public ResponseEntity<?> create (@PathVariable Integer clientId, @RequestBody SalesOrderShortDTO body){
         salesService.createOrder(clientId,body);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody UpdateSalesOrderDTO dto){
+    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody SalesOrderShortDTO dto){
         salesService.UpdateOrder(id, dto);
         return ResponseEntity.ok().build();
     }

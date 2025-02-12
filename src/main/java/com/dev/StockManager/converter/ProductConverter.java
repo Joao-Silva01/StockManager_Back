@@ -3,6 +3,9 @@ package com.dev.StockManager.converter;
 import com.dev.StockManager.dtos.product.ProductDTO;
 import com.dev.StockManager.entities.Category;
 import com.dev.StockManager.entities.Product;
+import com.dev.StockManager.entities.SalesOrder;
+
+import java.util.List;
 
 public class ProductConverter {
 
@@ -44,6 +47,13 @@ public class ProductConverter {
         }
 
         return entity;
+    }
+
+    public static List<ProductDTO> itensOrderConversion(List<Product> products) {
+        return products.stream()
+                .map(x ->
+                        new ProductDTO(x.getId(),x.getName(),x.getDescription(),x.getPrice(),x.getCategory_id().getCode(),x.getProductStock().getQuantity()))
+                .toList();
     }
 
 }

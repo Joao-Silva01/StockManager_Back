@@ -12,7 +12,7 @@ public class ClientValidator {
         // verificação do name
         if (client.getName() == null) {
             throw new ValidatorException("Name cannot be null!");
-        } else if (!client.getName().strip().matches("^[a-zA-Z-]{1,100}$") || client.getName().isBlank()) {
+        } else if (!client.getName().strip().matches("^[a-zA-Z-\\s]{1,100}$") || client.getName().isBlank()) {
             throw new ValidatorException("Name cannot be empty and must contain only letters!!");
         }
 

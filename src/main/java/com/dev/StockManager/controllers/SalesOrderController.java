@@ -6,7 +6,9 @@ import com.dev.StockManager.services.SalesOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -26,19 +28,20 @@ public class SalesOrderController {
     @PostMapping(value = "/{clientId}")
     public ResponseEntity<?> create (@PathVariable Integer clientId, @RequestBody SalesOrderShortDTO body){
         salesService.createOrder(clientId,body);
-        return ResponseEntity.ok().build();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(body).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody SalesOrderShortDTO dto){
         salesService.updateOrder(id, dto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(value = "/{orderId}")
     public ResponseEntity<?> delete(@PathVariable Integer orderId){
         salesService.deleteOrder(orderId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 

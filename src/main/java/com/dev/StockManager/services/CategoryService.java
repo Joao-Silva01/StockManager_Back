@@ -4,6 +4,7 @@ import com.dev.StockManager.dtos.CategoryDTO;
 import com.dev.StockManager.entities.Category;
 import com.dev.StockManager.exceptions.IdNotFoundException;
 import com.dev.StockManager.repositories.CategoryRepository;
+import com.dev.StockManager.validator.CategoryValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +29,17 @@ public class CategoryService {
 
     @Transactional
     public void create(CategoryDTO category){
+        CategoryValidator.validator(category);
         Category newCategory = new Category(category.getName());
         categoryRepository.save(newCategory);
+    }
+
+    @Transactional
+    public void update(Integer code,CategoryDTO dto){
+        CategoryValidator.validator(dto);
+        Category category = categoryRepository.findById(code).orElseThrow(() -> new IdNotFoundException("Category not found!"));
+
+        category.setName(dto.getName());
+
     }
 }

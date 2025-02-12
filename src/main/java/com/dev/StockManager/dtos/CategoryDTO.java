@@ -1,5 +1,7 @@
 package com.dev.StockManager.dtos;
 
+import com.dev.StockManager.converter.ProductConverter;
+import com.dev.StockManager.dtos.product.ProductDTO;
 import com.dev.StockManager.entities.Category;
 import com.dev.StockManager.entities.Product;
 import jakarta.validation.constraints.NotBlank;
@@ -12,18 +14,16 @@ import java.util.Objects;
 
 public class CategoryDTO implements Serializable {
 
-    @NotNull
     private Integer code;
-    @NotBlank
     private String name;
-    private List<Product> products = new ArrayList<>();
+    private List<ProductDTO> products = new ArrayList<>();
 
     public CategoryDTO(){}
 
     public CategoryDTO(Category entity) {
         this.code = entity.getCode();
         this.name = entity.getName();
-        this.products = entity.getProducts();
+        this.products = ProductConverter.itensOrderConversion(entity.getProducts());
     }
 
     public Integer getCode() {
@@ -42,11 +42,11 @@ public class CategoryDTO implements Serializable {
         this.name = name;
     }
 
-    public List<Product> getProducts() {
+    public List<ProductDTO> getProducts() {
         return products;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(List<ProductDTO> products) {
         this.products = products;
     }
 

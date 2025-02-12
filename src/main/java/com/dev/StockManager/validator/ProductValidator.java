@@ -1,6 +1,7 @@
 package com.dev.StockManager.validator;
 
 import com.dev.StockManager.dtos.product.ProductDTO;
+import com.dev.StockManager.entities.Product;
 import com.dev.StockManager.exceptions.ValidatorException;
 
 public class ProductValidator {
@@ -40,34 +41,28 @@ public class ProductValidator {
         }
     }
 
-    public static void validatorUpdate(ProductDTO product1, ProductDTO product2) {
+    public static void validatorUpdate(ProductDTO product1) {
         if (product1.getName() != null) {
-            if (product1.getName().strip().length() > 1) {
-                product2.setName(product1.getName());
-            } else {
+            if (product1.getName().strip().length() < 1) {
                 throw new ValidatorException("The name must have more than 1 character!");
             }
         }
         if (product1.getDescription() != null) {
-            if (product1.getDescription().strip().length() > 1) {
-                product2.setDescription(product1.getDescription());
-            } else {
+            if (product1.getDescription().strip().length() < 1) {
                 throw new ValidatorException("The description must have more than 1 character!");
             }
         }
         if (product1.getPrice() != null) {
-            if (product1.getPrice().doubleValue() > 0.01) {
-                product2.setPrice(product1.getPrice());
-            } else {
+            if (product1.getPrice().doubleValue() < 0.01) {
                 throw new ValidatorException("price cannot be negative or equal to zero");
             }
         }
         if (product1.getQuantity() != null) {
-            if (product1.getQuantity() > 0) {
-                product2.setQuantity(product1.getQuantity());
-            } else {
+            if (product1.getQuantity() < 0) {
                 throw new ValidatorException("Quantity cannot be negative or zero");
             }
         }
+
+
     }
 }

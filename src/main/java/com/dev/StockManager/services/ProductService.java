@@ -40,12 +40,13 @@ public class ProductService {
 
     @Transactional
     public void Create(ProductDTO productDTO) {
-        ProductValidator.validator(productDTO);
 
+        // Validações
+        ProductValidator.validator(productDTO);
         Category category = categoryRepository.findById(productDTO.getCategory())
                 .orElseThrow(() -> new IdNotFoundException("Category not found!"));
 
-        Product product = ProductConverter.toEntity(productDTO,category);
+        Product product = ProductConverter.toEntity(productDTO, category);
 
         productRepository.save(product);
 
@@ -57,20 +58,22 @@ public class ProductService {
 
     @Transactional
     public void update(Integer id, ProductDTO productDTO) {
-        ProductDTO prDTO = findById(id);
 
-        ProductValidator.validatorUpdate(productDTO,prDTO);
+        ProductValidator.validatorUpdate(productDTO);
+        Product pr = productRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Product not found"));
 
-        Category category = categoryRepository.findById(prDTO.getCategory())
-                .orElseThrow(() -> new IdNotFoundException("Category not found!"));
 
-        Product pr1 = ProductConverter.toEntity(prDTO,category);
+        Category category = null;
 
-        ProductStock stock = productStockRepository.findProductStock(prDTO.getId());
-        stock.setQuantity(prDTO.getQuantity());
+        if (productDTO.getCategory() != null) {
+            category = categoryRepository.findById(productDTO.getCategory())
+                    .orElseThrow(() -> new IdNotFoundException("Category not found!"));
+        }
+
+        Product pr1 = ProductConverter.toEntityUpdate(pr, productDTO, category);
 
         productRepository.save(pr1);
-        productStockRepository.save(stock);
+
     }
 
 }

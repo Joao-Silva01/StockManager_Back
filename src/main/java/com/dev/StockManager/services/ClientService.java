@@ -22,6 +22,7 @@ import com.dev.StockManager.validator.CpfOrCnpjValidator;
 import com.dev.StockManager.validator.PhoneValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -56,6 +57,7 @@ public class ClientService {
         return new ClientDTO(client);
     }
 
+    @Transactional
     public void create(ClientDTO entity) {
 
         // Validações de entidades
@@ -73,7 +75,7 @@ public class ClientService {
 
     }
 
-    // Endpoint que faz update de somente 3 campos
+    @Transactional // Endpoint que faz update de somente 3 campos
     public void update(Integer id, ClientDTO clientDTO) {
         ClientDTO ctDTO = findById(id);
 
@@ -84,6 +86,7 @@ public class ClientService {
         clientRepository.save(ct1);
     }
 
+    @Transactional
     public void updateClientPhone(Integer clientId, Integer indexPhone, PhoneDTO phone) {
 
         //Validações
@@ -118,6 +121,7 @@ public class ClientService {
         clientRepository.save(ct);
     }
 
+    @Transactional
     public void updateClientAddress(Integer clientId, Integer indexAddress, AddressDTO dto) {
         // Mesma lógica do updateClientPhone
 
@@ -159,6 +163,7 @@ public class ClientService {
         clientRepository.save(ct);
     }
 
+    @Transactional
     public void delete(Integer id) {
         clientRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Client not found"));
         clientRepository.deleteById(id);

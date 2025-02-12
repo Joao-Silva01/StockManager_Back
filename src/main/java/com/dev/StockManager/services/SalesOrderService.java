@@ -11,6 +11,7 @@ import com.dev.StockManager.repositories.*;
 import com.dev.StockManager.validator.SalesOrderValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,7 @@ public class SalesOrderService {
         return sales.stream().map(x -> new SalesOrderDTO(x)).toList();
     }
 
+    @Transactional
     public void createOrder(Integer clientId, SalesOrderShortDTO order) {
         // Pegando os dados do banco de dados para validar
         Client client = clientRepository.findById(clientId).orElseThrow(() -> new IdNotFoundException("Client id not found"));
@@ -69,6 +71,7 @@ public class SalesOrderService {
 
     }
 
+    @Transactional
     public void updateOrder(Integer orderId, SalesOrderShortDTO sales) {
         SalesOrder order = salesOrderRepository.findById(orderId).orElseThrow(() -> new IdNotFoundException("Order not found"));
         SalesOrderValidator.statusValidator(order);
@@ -92,6 +95,7 @@ public class SalesOrderService {
         salesOrderProductRepository.saveAll(sop);
     }
 
+    @Transactional
     public void deleteOrder(Integer orderId){
         salesOrderRepository.findById(orderId).orElseThrow(() -> new IdNotFoundException("Order not found"));
         salesOrderRepository.deleteById(orderId);

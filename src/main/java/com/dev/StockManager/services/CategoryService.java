@@ -6,6 +6,7 @@ import com.dev.StockManager.exceptions.IdNotFoundException;
 import com.dev.StockManager.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class CategoryService {
         return new CategoryDTO(category);
     }
 
+    @Transactional
     public void create(CategoryDTO category){
         Category newCategory = new Category(category.getName());
         categoryRepository.save(newCategory);

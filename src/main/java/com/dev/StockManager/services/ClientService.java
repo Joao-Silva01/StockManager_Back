@@ -60,30 +60,24 @@ public class ClientService {
 
         // Validações de entidades
         ClientValidator.validator(entity);
-        for(AddressDTO add : entity.getAddresses()){
-            AddressValidator.validator(add);
-        }
-        for(PhoneDTO pho : entity.getPhones()){
-            PhoneValidator.validator(pho);
-        }
+        AddressValidator.addressesValidator(entity.getAddresses());
+        PhoneValidator.phonesValidator(entity.getPhones());
 
         entity.setRegister_Moment(Timestamp.from(Instant.now()));
+
         Client client2 = ClientConverter.toEntity(entity);
 
-        List<Phone> phones = PhoneConverter.toListDTO(entity.getPhones(),client2);
-
-        List<Address> addresses = AddressConverter.toListDTO(entity.getAddresses(), client2);
-
-        client2.setPhones(phones);
-        client2.setAddresses(addresses);
         clientRepository.save(client2);
+        phoneRepository.saveAll(client2.getPhones());
+        addressRepository.saveAll(client2.getAddresses());
+
     }
 
     // Endpoint que faz update de somente 3 campos
     public void update(Integer id, ClientDTO clientDTO) {
         ClientDTO ctDTO = findById(id);
 
-        ClientValidator.validatorUpdate(ctDTO,clientDTO);
+        ClientValidator.validatorUpdate(ctDTO, clientDTO);
 
         Client ct1 = ClientConverter.toEntity(ctDTO);
 
@@ -91,41 +85,81 @@ public class ClientService {
     }
 
     public void updateClientPhone(Integer clientId, Integer indexPhone, PhoneDTO phone) {
+
+        //Validações
+        PhoneValidator.fixedSizeValidator(indexPhone);
+        PhoneValidator.phoneValidator(phone);
         Client ct = clientRepository.findById(clientId).orElseThrow(() -> new IdNotFoundException("Client not found!"));
+
         Phone p = new Phone();
 
-        for (int i = 0; i < 2; i++) {
-            if (indexPhone == i){
-                p = phoneRepository.findById(ct.getPhones().get(i).getId()).get();
-                p.setNumber(phone.getNumber());
-                ct.getPhones().add(i, p);
-            }
+        // Uma lista recebendo os dados de telefone do cliente
+        // e caso não complete o tamanho máximo preenche com objetos nulos
+        List<Phone> phones = new ArrayList<>(ct.getPhones());
+        while (phones.size() < 2) {
+            phones.add(null);
         }
 
-        phoneRepository.save(p);
+        //Verificação do telefone
+        if (phones.get(indexPhone) != null) { // caso o telefone já existe, acontece a troca do número
+            p = phoneRepository.findById(phones.get(indexPhone).getId())
+                    .orElseThrow(() -> new IdNotFoundException("Phone not found!"));
+            p.setNumber(phone.getNumber());
+
+        } else { // caso o telefone não existe, acontece a adição do número
+            p.setNumber(phone.getNumber());
+            p.setClientId(ct);
+            phoneRepository.save(p);
+        }
+
+        phones.set(indexPhone, p);
+        ct.setPhones(phones);
+
         clientRepository.save(ct);
     }
 
-    public void updateClientAddress(Integer clientId, Integer indexAddress, AddressDTO address) {
+    public void updateClientAddress(Integer clientId, Integer indexAddress, AddressDTO dto) {
+        // Mesma lógica do updateClientPhone
+
+        //Validações
+        AddressValidator.fixedSizeValidator(indexAddress);
+        AddressValidator.addressValidator(dto);
         Client ct = clientRepository.findById(clientId).orElseThrow(() -> new IdNotFoundException("Client not found!"));
-        Address addr = new Address();
 
-        for (int i = 0; i < 3; i++) {
-            if (indexAddress == i) {
-                addr = addressRepository.findById(ct.getAddresses().get(i).getId()).get();
-                addr.setStreetName(address.getStreetName());
-                addr.setComplement(address.getComplement());
-                addr.setNeighborhoodName(address.getNeighborhoodName());
-                addr.setNumber(address.getNumber());
-                addr.setCep(address.getCep());
-            }
+        // Uma lista recebendo os dados dos endereços do cliente
+        // e caso não complete o tamanho máximo preenche com objetos nulos
+        List<Address> addresses = new ArrayList<>(ct.getAddresses());
+        while (addresses.size() < 3) {
+            addresses.add(null);
         }
 
-        addressRepository.save(addr);
+        Address address = new Address();
+
+        //Verificação do endereço
+        if(addresses.get(indexAddress) != null){ // caso o endereço exista, acontece a troca de endereço
+            address = addressRepository.findById(addresses.get(indexAddress).getId())
+                    .orElseThrow(() -> new IdNotFoundException("Phone not found!"));
+            address.setStreetName(dto.getStreetName());
+            address.setComplement(dto.getComplement());
+            address.setNeighborhoodName(dto.getNeighborhoodName());
+            address.setNumber(dto.getNumber());
+            address.setCep(dto.getCep());
+        }else { // caso o endereço não exista, acontece a adição do endereço
+            address.setStreetName(dto.getStreetName());
+            address.setComplement(dto.getComplement());
+            address.setNeighborhoodName(dto.getNeighborhoodName());
+            address.setNumber(dto.getNumber());
+            address.setCep(dto.getCep());
+            address.setClient(ct);
+
+        }
+
+
+        addressRepository.save(address);
         clientRepository.save(ct);
     }
 
-    public void delete(Integer id){
+    public void delete(Integer id) {
         clientRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Client not found"));
         clientRepository.deleteById(id);
     }

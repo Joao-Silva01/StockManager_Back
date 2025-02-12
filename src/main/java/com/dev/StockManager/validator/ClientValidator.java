@@ -41,9 +41,19 @@ public class ClientValidator {
             throw new ValidatorException("Type cannot be null!");
         }
 
+        // Verificação do tamanho minimo de telefones
+        if(client.getPhones().isEmpty() ){
+            throw new ValidatorException("User must have at least 1 phone!!");
+        }
+
         // Verificação do tamanho maximo de telefones
         if (client.getPhones().size() > 2) {
             throw new ValidatorException("Only 2 phones per user!!");
+        }
+
+        // Verificação do tamanho minimo de endereços
+        if(client.getAddresses().isEmpty() ){
+            throw new ValidatorException("User must have at least 1 address!!");
         }
 
         // Verificação do tamanho maximo de endereços

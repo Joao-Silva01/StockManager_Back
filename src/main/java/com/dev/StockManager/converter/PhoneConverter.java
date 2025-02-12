@@ -11,11 +11,11 @@ import java.util.List;
 
 public class PhoneConverter {
 
-    public static Phone toEntity(PhoneDTO dto){
+    public static Phone toEntity(PhoneDTO dto, Client client){
         Phone phone = new Phone();
         phone.setId(dto.getId());
         phone.setNumber(dto.getNumber());
-        phone.setClientId(dto.getClientId());
+        phone.setClientId(client);
 
         return phone;
     }

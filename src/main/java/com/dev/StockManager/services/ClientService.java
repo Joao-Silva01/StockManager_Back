@@ -62,6 +62,7 @@ public class ClientService {
 
         // Validações de entidades
         ClientValidator.validator(entity);
+        ClientValidator.hasThisCpfOrCnpjValidator(findAll(), entity);
         AddressValidator.addressesValidator(entity.getAddresses());
         PhoneValidator.phonesValidator(entity.getPhones());
 
@@ -98,7 +99,7 @@ public class ClientService {
 
         // Uma lista recebendo os dados de telefone do cliente
         // e caso não complete o tamanho máximo preenche com objetos nulos
-        List<Phone> phones = new ArrayList<>(ct.getPhones());
+        List<Phone> phones = ct.getPhones();
         while (phones.size() < 2) {
             phones.add(null);
         }
@@ -132,7 +133,7 @@ public class ClientService {
 
         // Uma lista recebendo os dados dos endereços do cliente
         // e caso não complete o tamanho máximo preenche com objetos nulos
-        List<Address> addresses = new ArrayList<>(ct.getAddresses());
+        List<Address> addresses = ct.getAddresses();
         while (addresses.size() < 3) {
             addresses.add(null);
         }
@@ -141,21 +142,12 @@ public class ClientService {
 
         //Verificação do endereço
         if(addresses.get(indexAddress) != null){ // caso o endereço exista, acontece a troca de endereço
-            address = addressRepository.findById(addresses.get(indexAddress).getId())
+            Address addr = addressRepository.findById(addresses.get(indexAddress).getId())
                     .orElseThrow(() -> new IdNotFoundException("Phone not found!"));
-            address.setStreetName(dto.getStreetName());
-            address.setComplement(dto.getComplement());
-            address.setNeighborhoodName(dto.getNeighborhoodName());
-            address.setNumber(dto.getNumber());
-            address.setCep(dto.getCep());
+            address = AddressConverter.toEntityUpdate(dto,addr);
         }else { // caso o endereço não exista, acontece a adição do endereço
-            address.setStreetName(dto.getStreetName());
-            address.setComplement(dto.getComplement());
-            address.setNeighborhoodName(dto.getNeighborhoodName());
-            address.setNumber(dto.getNumber());
-            address.setCep(dto.getCep());
+            address = AddressConverter.toEntityUpdate(dto, null);
             address.setClient(ct);
-
         }
 
 

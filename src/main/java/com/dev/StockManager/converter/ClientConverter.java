@@ -17,18 +17,6 @@ public class ClientConverter {
         return cs;
     }
 
-    public static ClientDTO toDTO(Client client) {
-        ClientDTO dto = new ClientDTO(client);
-        /*dto.setId(client.getId());
-        dto.setName(client.getName());
-        dto.setEmail(client.getEmail());
-        dto.setCpf_Or_Cnpj(client.getCpf_Or_Cnpj());
-        dto.setAddresses(client.getAddresses());
-        dto.setPhones(client.getPhones());
-        dto.setRegister_Moment(client.getRegister_Moment());*/
-        return dto;
-    }
-
     public static Client toEntity(ClientDTO dto) {
         Client client = new Client();
         client.setId(dto.getId());

@@ -16,6 +16,7 @@ public class Client  implements Serializable {
     private Integer id;
 
     private String name;
+    @Column(unique = true)
     private String cpf_Or_Cnpj;
     private String email;
     private Timestamp register_Moment;

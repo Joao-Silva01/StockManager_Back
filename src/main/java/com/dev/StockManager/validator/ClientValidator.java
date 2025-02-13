@@ -1,9 +1,11 @@
 package com.dev.StockManager.validator;
 
 import com.dev.StockManager.dtos.client.ClientDTO;
+import com.dev.StockManager.entities.Client;
 import com.dev.StockManager.entities.enums.TypeClient;
 import com.dev.StockManager.exceptions.ValidatorException;
 
+import java.util.List;
 import java.util.Objects;
 
 public class ClientValidator {
@@ -42,7 +44,7 @@ public class ClientValidator {
         }
 
         // Verificação do tamanho minimo de telefones
-        if(client.getPhones().isEmpty() ){
+        if (client.getPhones().isEmpty()) {
             throw new ValidatorException("User must have at least 1 phone!!");
         }
 
@@ -52,7 +54,7 @@ public class ClientValidator {
         }
 
         // Verificação do tamanho minimo de endereços
-        if(client.getAddresses().isEmpty() ){
+        if (client.getAddresses().isEmpty()) {
             throw new ValidatorException("User must have at least 1 address!!");
         }
 
@@ -89,6 +91,20 @@ public class ClientValidator {
                 }
             }
             c1.setCpf_Or_Cnpj(c2.getCpf_Or_Cnpj());
+        }
+    }
+
+    public static void hasThisCpfOrCnpjValidator(List<ClientDTO> clients, ClientDTO client) {
+        for (ClientDTO ctDTO : clients) {
+            if (ctDTO.getType() == TypeClient.INDIVIDUAL_CLIENT) {
+                if (ctDTO.getCpf_Or_Cnpj().equals(client.getCpf_Or_Cnpj().strip())) {
+                    throw new ValidatorException("CPF is already registered!");
+                }
+            }else{
+                if (ctDTO.getCpf_Or_Cnpj().equals(client.getCpf_Or_Cnpj().strip())) {
+                    throw new ValidatorException("CNPJ is already registered!");
+                }
+            }
         }
     }
 }

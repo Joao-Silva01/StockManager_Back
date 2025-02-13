@@ -68,10 +68,6 @@ public class SalesOrder implements Serializable {
         return priceTotal;
     }
 
-    public void setPriceTotal(BigDecimal priceTotal) {
-        this.priceTotal = priceTotal;
-    }
-
     public Timestamp getDateMoment() {
         return dateMoment;
     }
@@ -121,10 +117,8 @@ public class SalesOrder implements Serializable {
     }
 
     public void calculateTotalPrice() {
-        priceTotal = new BigDecimal(0.00);
-        for (SalesOrderProduct product : products) {
-            priceTotal = BigDecimal.valueOf(priceTotal.doubleValue() + product.getPrice().doubleValue() * product.getQuantity());
-        }
+        priceTotal = BigDecimal.valueOf(products.stream()
+                .mapToDouble(x -> x.getPrice().doubleValue() * x.getQuantity()).sum());
     }
 
     @Override

@@ -1,16 +1,18 @@
 package com.dev.StockManager.validator;
 
-import com.dev.StockManager.entities.enums.TypeClient;
 import com.dev.StockManager.exceptions.ValidatorException;
 
-import java.util.Objects;
 
 public class CpfOrCnpjValidator {
 
     public static boolean CpfValidator(String cpf) {
 
+        if (cpf.matches("^[0-9]{14}$")) {
+            throw new ValidatorException("The customer type is incorrect");
+        }
+
         if (!cpf.matches("^[0-9]{11}$")) {
-            throw new ValidatorException("Invalid CPF format!! " + cpf);
+            throw new ValidatorException("Invalid CPF format!! ");
         }
 
         int CheckDigit1 = CheckDigit(cpf, 10, "cpf");
@@ -22,8 +24,12 @@ public class CpfOrCnpjValidator {
 
     public static boolean CnpjValidator(String cnpj) {
 
+        if (cnpj.matches("^[0-9]{11}$")) {
+            throw new ValidatorException("The customer type is incorrect");
+        }
+
         if (!cnpj.matches("^[0-9]{14}$")) {
-            throw new ValidatorException("Invalid CNPJ format!! " + cnpj);
+            throw new ValidatorException("Invalid CNPJ format!! ");
         }
 
         int CheckDigit1 = CheckDigit(cnpj, 12, "cnpj");

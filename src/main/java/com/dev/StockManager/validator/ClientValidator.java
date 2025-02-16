@@ -1,6 +1,7 @@
 package com.dev.StockManager.validator;
 
 import com.dev.StockManager.dtos.client.ClientDTO;
+import com.dev.StockManager.dtos.client.CreateClientDTO;
 import com.dev.StockManager.entities.Client;
 import com.dev.StockManager.entities.enums.TypeClient;
 import com.dev.StockManager.exceptions.ValidatorException;
@@ -9,7 +10,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class ClientValidator {
-    public static void validator(ClientDTO client) {
+
+    public static void validator(CreateClientDTO client) {
 
         // verificação do name
         if (client.getName() == null) {
@@ -19,14 +21,14 @@ public class ClientValidator {
         }
 
         // Verificação do CPF ou CNPJ
-        if (client.getCpf_Or_Cnpj() == null || client.getCpf_Or_Cnpj().isBlank()) {
+        if (client.getDocument() == null || client.getDocument().isBlank()) {
             throw new ValidatorException("cpf or Cnpj cannot be null or empty!");
         } else if (Objects.equals(client.getType().getCode(), TypeClient.INDIVIDUAL_CLIENT.getCode())) {
-            if (!CpfOrCnpjValidator.CpfValidator(client.getCpf_Or_Cnpj().strip())) {
+            if (!CpfOrCnpjValidator.CpfValidator(client.getDocument().strip())) {
                 throw new ValidatorException("Incorrect CPF!!");
             }
         } else {
-            if (!CpfOrCnpjValidator.CnpjValidator(client.getCpf_Or_Cnpj().strip())) {
+            if (!CpfOrCnpjValidator.CnpjValidator(client.getDocument().strip())) {
                 throw new ValidatorException("Incorrect CNPJ!!");
             }
         }
@@ -65,43 +67,42 @@ public class ClientValidator {
 
     }
 
-    public static void validatorUpdate(ClientDTO c1, ClientDTO c2) {
+    public static void validatorUpdate(Client c1, ClientDTO c2) {
         if (c2.getName() != null) {
-            if (c2.getName().strip().matches("^[a-zA-Z-]{1,100}$") || !c2.getName().isBlank()) {
-                c1.setName(c2.getName().strip());
-            } else {
+            if (!c2.getName().strip().matches("^[a-zA-Z-]{1,100}$") || c2.getName().isBlank()) {
                 throw new ValidatorException("Name cannot be empty and must contain only letters!!");
             }
         }
+
+
         if (c2.getEmail() != null) {
-            if (c2.getEmail().strip().matches("^[a-zA-Z0-9_-]+@[a-zA-Z]+[.][a-zA-Z]{3}$")) {
-                c1.setEmail(c2.getEmail().strip());
-            } else {
+            if (!c2.getEmail().strip().matches("^[a-zA-Z0-9_-]+@[a-zA-Z]+[.][a-zA-Z]{3}$")) {
                 throw new ValidatorException("Incorrect email!!");
             }
         }
-        if (c2.getCpf_Or_Cnpj() != null) {
+
+
+        if (c2.getDocument() != null) {
             if (Objects.equals(c1.getType().getCode(), TypeClient.INDIVIDUAL_CLIENT.getCode())) {
-                if (!CpfOrCnpjValidator.CpfValidator(c2.getCpf_Or_Cnpj().strip())) {
+                if (!CpfOrCnpjValidator.CpfValidator(c2.getDocument().strip())) {
                     throw new ValidatorException("Incorrect CPF!!");
                 }
             } else {
-                if (!CpfOrCnpjValidator.CnpjValidator(c2.getCpf_Or_Cnpj().strip())) {
+                if (!CpfOrCnpjValidator.CnpjValidator(c2.getDocument().strip())) {
                     throw new ValidatorException("Incorrect CNPJ!!");
                 }
             }
-            c1.setCpf_Or_Cnpj(c2.getCpf_Or_Cnpj());
         }
     }
 
-    public static void hasThisCpfOrCnpjValidator(List<ClientDTO> clients, ClientDTO client) {
+    public static void hasThisCpfOrCnpjValidator(List<ClientDTO> clients, String document) {
         for (ClientDTO ctDTO : clients) {
             if (ctDTO.getType() == TypeClient.INDIVIDUAL_CLIENT) {
-                if (ctDTO.getCpf_Or_Cnpj().equals(client.getCpf_Or_Cnpj().strip())) {
+                if (ctDTO.getDocument().equals(document.strip())) {
                     throw new ValidatorException("CPF is already registered!");
                 }
             }else{
-                if (ctDTO.getCpf_Or_Cnpj().equals(client.getCpf_Or_Cnpj().strip())) {
+                if (ctDTO.getDocument().equals(document.strip())) {
                     throw new ValidatorException("CNPJ is already registered!");
                 }
             }

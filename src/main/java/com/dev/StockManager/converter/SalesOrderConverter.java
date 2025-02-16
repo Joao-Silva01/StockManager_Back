@@ -41,8 +41,10 @@ public class SalesOrderConverter {
     }
 
     public static SalesOrder toUpdateEntity(SalesOrder order, SalesOrderShortDTO dto) {
-        // Posso mudar o endereço de entrega, telefone e o itens
+
         if (dto.getDeliveryAddress() != null) {
+
+            // Loop para atualizar o endereço do cliente de acordo com o index dele
             for (int i = 0; i < order.getClientId().getAddresses().size(); i++) {
                 if (dto.getDeliveryAddress() == i) {
                     order.setDeliveryAddress(order.getClientId().getAddresses().get(dto.getDeliveryAddress()));
@@ -50,6 +52,8 @@ public class SalesOrderConverter {
             }
         }
         if (dto.getPhone() != null) {
+
+            // Loop para atualizar o telefone do cliente de acordo com o index dele
             for (int i = 0; i < order.getClientId().getPhones().size(); i++) {
                 if (dto.getPhone() == i) {
                     order.setPhone(order.getClientId().getPhones().get(dto.getPhone()));
@@ -73,6 +77,7 @@ public class SalesOrderConverter {
     public static Address deliveryAddressAssociationConverter(SalesOrderShortDTO order, Client client) {
         Address address = new Address();
 
+        // Loop para retornar/associar o endereço de acordo com index dele na lista getAddresses()
         for (int i = 0; i < client.getAddresses().size(); i++) {
             if (order.getDeliveryAddress() == i) {
                 address = client.getAddresses().get(order.getDeliveryAddress());
@@ -83,12 +88,13 @@ public class SalesOrderConverter {
         return address;
     }
 
-    public static Phone phoneAssociationConverter(SalesOrderShortDTO order, Client client) {
+    public static Phone phoneAssociationConverter(SalesOrderShortDTO salesDTO, Client client) {
         Phone phone = new Phone();
 
+        // Loop para retornar/associar o telefone de acordo com index dele na lista getPhones()
         for (int i = 0; i < client.getPhones().size(); i++) {
-            if (order.getPhone() == i) {
-                phone = client.getPhones().get(order.getPhone());
+            if (salesDTO.getPhone() == i) {
+                phone = client.getPhones().get(salesDTO.getPhone());
                 break;
             }
         }

@@ -3,6 +3,7 @@ package com.dev.StockManager.controllers;
 import com.dev.StockManager.dtos.AddressDTO;
 import com.dev.StockManager.dtos.client.ClientDTO;
 import com.dev.StockManager.dtos.PhoneDTO;
+import com.dev.StockManager.dtos.client.CreateClientDTO;
 import com.dev.StockManager.dtos.sales.SalesOrderDTO;
 import com.dev.StockManager.services.ClientService;
 import com.dev.StockManager.services.SalesOrderService;
@@ -36,14 +37,14 @@ public class ClientController {
     }
 
     @GetMapping(value = "/{clientId}/orders")
-    public ResponseEntity<List<SalesOrderDTO>> find(@PathVariable Integer clientId) {
+    public ResponseEntity<List<SalesOrderDTO>> findAllOrders(@PathVariable Integer clientId) {
         return ResponseEntity.ok().body(salesService.allCustomerOrders(clientId));
     }
 
     @PostMapping
-    public ResponseEntity<ClientDTO> create(@RequestBody ClientDTO client) {
+    public ResponseEntity<CreateClientDTO> create(@RequestBody CreateClientDTO client) {
         clientService.create(client);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(client.getId()).toUri();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(client).toUri();
         return ResponseEntity.created(uri).build();
     }
 

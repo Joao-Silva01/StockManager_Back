@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface SalesOrderRepository extends JpaRepository<SalesOrder,Integer> {
 
-    @Query(value = "SELECT * FROM SALES_ORDER WHERE CLIENT_ID = ?",nativeQuery = true)
+    @Query(value = "SELECT * FROM SALES_ORDER WHERE CLIENT = ?",nativeQuery = true)
     List<SalesOrder> findA(Integer id);
 }

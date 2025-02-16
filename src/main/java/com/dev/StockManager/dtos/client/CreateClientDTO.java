@@ -11,26 +11,28 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClientDTO implements Serializable {
+public class CreateClientDTO implements Serializable {
 
     private Integer id;
     private String name;
     private String document;
     private String email;
+    private String password;
     private Timestamp register_Moment;
     private TypeClient type;
 
     private List<PhoneDTO> phones = new ArrayList<>();
     private List<AddressDTO> addresses = new ArrayList<>();
 
-    public ClientDTO() {
+    public CreateClientDTO() {
     }
 
-    public ClientDTO(Client entity) {
+    public CreateClientDTO(Client entity) {
         this.id = entity.getId();
         this.name = entity.getName();
         this.document = entity.getDocument();
         this.email = entity.getEmail();
+        this.password = entity.getPassword();
         this.register_Moment = entity.getRegister_Moment();
         this.type = entity.getType();
         this.phones = entity.getPhones().stream().map(PhoneDTO::new).toList();
@@ -67,6 +69,14 @@ public class ClientDTO implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Timestamp getRegister_Moment() {

@@ -10,6 +10,7 @@ import com.dev.StockManager.entities.SalesOrder;
 import com.dev.StockManager.entities.enums.SalesOrderStatus;
 import com.dev.StockManager.converter.ClientConverter;
 import com.dev.StockManager.converter.SalesOrderConverter;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 
 import java.io.Serializable;
@@ -19,19 +20,20 @@ import java.util.List;
 
 public class SalesOrderDTO implements Serializable {
 
-    private Integer id;
+    private Integer orderId;
 
-    private ClientShortDTO clientId;
+    private ClientShortDTO client;
 
     private AddressDTO deliveryAddress;
 
     private PhoneDTO phone;
 
-    private List<ProductDTO> itens;
+    private List<ProductDTO> products;
 
     @Column(scale = 10, precision = 2)
     private BigDecimal priceTotal;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Sao_Paulo")
     private Timestamp dateMoment;
 
     private SalesOrderStatus status;
@@ -39,24 +41,23 @@ public class SalesOrderDTO implements Serializable {
     public SalesOrderDTO(){}
 
     public SalesOrderDTO(SalesOrder order) {
-        this.id = order.getId();
+        this.orderId = order.getId();
         this.priceTotal = order.getPriceTotal();
         this.dateMoment = order.getDateMoment();
         this.status = order.getStatus();
         this.deliveryAddress = AddressConverter.deliveryConversion(order);
         this.phone = PhoneConverter.phoneSalesConversion(order);
-        this.clientId = ClientConverter.shortConversion(order.getClientId()); // realiza a conversão do Client pro ClientShortDTO
-        this.itens = SalesOrderConverter.itensOrderConversion(order);
+        this.client = ClientConverter.shortConversion(order.getClientId()); // realiza a conversão do Client pro ClientShortDTO
+        this.products = SalesOrderConverter.itensOrderConversion(order);
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getOrderId() {
+        return orderId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
     }
-
 
     public BigDecimal getPriceTotal() {
         return priceTotal;
@@ -82,20 +83,20 @@ public class SalesOrderDTO implements Serializable {
         this.status = status;
     }
 
-    public List<ProductDTO> getItens() {
-        return itens;
+    public List<ProductDTO> getProducts() {
+        return products;
     }
 
-    public void setItens(List<ProductDTO> itens) {
-        this.itens = itens;
+    public void setProducts(List<ProductDTO> products) {
+        this.products = products;
     }
 
-    public ClientShortDTO getClientId() {
-        return clientId;
+    public ClientShortDTO getClient() {
+        return client;
     }
 
-    public void setClientId(ClientShortDTO clientId) {
-        this.clientId = clientId;
+    public void setClient(ClientShortDTO client) {
+        this.client = client;
     }
 
     public AddressDTO getDeliveryAddress() {

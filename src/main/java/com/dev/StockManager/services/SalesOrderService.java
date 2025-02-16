@@ -40,56 +40,57 @@ public class SalesOrderService {
     public List<SalesOrderDTO> allOrders() {
         List<SalesOrder> list = salesOrderRepository.findAll();
 
-        return list.stream().map(x -> new SalesOrderDTO(x)).toList();
+        return list.stream().map(SalesOrderDTO::new).toList();
     }
 
     public List<SalesOrderDTO> allCustomerOrders(Integer clientId) {
         clientRepository.findById(clientId).orElseThrow(() -> new IdNotFoundException("Client id not found"));
         List<SalesOrder> sales = salesOrderRepository.findA(clientId);
 
-        return sales.stream().map(x -> new SalesOrderDTO(x)).toList();
+        return sales.stream().map(SalesOrderDTO::new).toList();
     }
 
     @Transactional
-    public void createOrder(Integer clientId, SalesOrderShortDTO order) {
+    public void createOrder(Integer clientId, SalesOrderShortDTO salesDTO) {
         // Pegando os dados do banco de dados para validar
         Client client = clientRepository.findById(clientId).orElseThrow(() -> new IdNotFoundException("Client id not found"));
 
-        SalesOrderValidator.createOrderValidator(order, client);
+        SalesOrderValidator.createOrderValidator(salesDTO, client);
 
-        Address address = SalesOrderConverter.deliveryAddressAssociationConverter(order, client);
-        Phone phone = SalesOrderConverter.phoneAssociationConverter(order, client);
+        Address address = SalesOrderConverter.deliveryAddressAssociationConverter(salesDTO, client);
+        Phone phone = SalesOrderConverter.phoneAssociationConverter(salesDTO, client);
 
-        List<Product> products = listItensOrder(order); // lista para armazenar os dados originais dos produtos
+        // lista para armazenar os dados originais dos produtos
+        List<Product> products = listItensOrder(salesDTO);
 
-        SalesOrder so = SalesOrderConverter.toCreateEntity(order, address, phone, client, products);
-        salesOrderRepository.save(so);
+        SalesOrder sales = SalesOrderConverter.toCreateEntity(salesDTO, address, phone, client, products);
+        salesOrderRepository.save(sales);
 
-        List<SalesOrderProduct> sop = SalesOrderProductConverter.toCreateEntity(order, so, products);
+        List<SalesOrderProduct> sop = SalesOrderProductConverter.toCreateEntity(salesDTO, sales, products);
 
         salesOrderProductRepository.saveAll(sop);
 
     }
 
     @Transactional
-    public void updateOrder(Integer orderId, SalesOrderShortDTO sales) {
+    public void updateOrder(Integer orderId, SalesOrderShortDTO salesDTO) {
         SalesOrder order = salesOrderRepository.findById(orderId).orElseThrow(() -> new IdNotFoundException("Order not found"));
         SalesOrderValidator.statusValidator(order);
-        SalesOrderValidator.updateOrderValidator(sales, order.getClientId());
-        SalesOrder save = SalesOrderConverter.toUpdateEntity(order, sales);
+        SalesOrderValidator.updateOrderValidator(salesDTO, order.getClientId());
+        SalesOrder sales = SalesOrderConverter.toUpdateEntity(order, salesDTO);
 
         List<Product> products = new ArrayList<>();
 
-        if (sales.getItens() != null) {
-            products = listItensOrder(sales);
+        if (salesDTO.getItens() != null) {
+            products = listItensOrder(salesDTO);
         }
 
-        salesOrderRepository.save(save);
+        salesOrderRepository.save(sales);
 
-        List<SalesOrderProduct> sop = SalesOrderProductConverter.toUpdateEntity(sales, save, products);
-        save.setProducts(sop);
+        List<SalesOrderProduct> sop = SalesOrderProductConverter.toUpdateEntity(salesDTO, sales, products);
+        sales.setProducts(sop);
 
-        save.calculateTotalPrice();
+        sales.calculateTotalPrice();
 
 
         salesOrderProductRepository.saveAll(sop);
@@ -102,11 +103,11 @@ public class SalesOrderService {
     }
 
 
-    public List<Product> listItensOrder(SalesOrderShortDTO sos) {
+    public List<Product> listItensOrder(SalesOrderShortDTO salesDTO) {
         List<Product> products = new ArrayList<>();
 
         // Laço para adicionar todos os produtos do pedido na lista products
-        for (CreateShortProductAssociationDTO cspa : sos.getItens()) {
+        for (CreateShortProductAssociationDTO cspa : salesDTO.getItens()) {
             products.add(productRepository.findById(cspa.getId()).orElseThrow(() -> new IdNotFoundException("Product not found")));
         }
         return products;

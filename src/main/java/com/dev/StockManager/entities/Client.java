@@ -14,12 +14,14 @@ public class Client  implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String name;
+
     @Column(unique = true)
-    private String cpf_Or_Cnpj;
+    private String document;
     private String email;
     private Timestamp register_Moment;
+
+    private String password;
 
     @Enumerated(value = EnumType.ORDINAL)
     private TypeClient type;
@@ -35,12 +37,13 @@ public class Client  implements Serializable {
 
     public Client(){}
 
-    public Client(Integer id, String name, String cpf_Or_Cnpj, String email, Timestamp register_Moment, TypeClient type) {
+    public Client(Integer id, String name, String document, String email, Timestamp register_Moment, String password, TypeClient type) {
         this.id = id;
         this.name = name;
-        this.cpf_Or_Cnpj = cpf_Or_Cnpj;
+        this.document = document;
         this.email = email;
         this.register_Moment = register_Moment;
+        this.password = password;
         this.type = type;
     }
 
@@ -60,12 +63,12 @@ public class Client  implements Serializable {
         this.name = name;
     }
 
-    public String getCpf_Or_Cnpj() {
-        return cpf_Or_Cnpj;
+    public String getDocument() {
+        return document;
     }
 
-    public void setCpf_Or_Cnpj(String cpf_Or_Cnpj) {
-        this.cpf_Or_Cnpj = cpf_Or_Cnpj;
+    public void setDocument(String document) {
+        this.document = document;
     }
 
     public String getEmail() {
@@ -90,6 +93,14 @@ public class Client  implements Serializable {
 
     public void setType(TypeClient type) {
         this.type = type;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public List<Phone> getPhones() {

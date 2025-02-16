@@ -6,6 +6,7 @@ import com.dev.StockManager.converter.PhoneConverter;
 import com.dev.StockManager.dtos.AddressDTO;
 import com.dev.StockManager.dtos.client.ClientDTO;
 import com.dev.StockManager.dtos.PhoneDTO;
+import com.dev.StockManager.dtos.client.CreateClientDTO;
 import com.dev.StockManager.entities.Address;
 import com.dev.StockManager.entities.Client;
 import com.dev.StockManager.entities.Phone;
@@ -58,17 +59,15 @@ public class ClientService {
     }
 
     @Transactional
-    public void create(ClientDTO entity) {
+    public void create(CreateClientDTO entity) {
 
         // Validações de entidades
         ClientValidator.validator(entity);
-        ClientValidator.hasThisCpfOrCnpjValidator(findAll(), entity);
+        ClientValidator.hasThisCpfOrCnpjValidator(findAll(), entity.getDocument());
         AddressValidator.addressesValidator(entity.getAddresses());
         PhoneValidator.phonesValidator(entity.getPhones());
 
-        entity.setRegister_Moment(Timestamp.from(Instant.now()));
-
-        Client client2 = ClientConverter.toEntity(entity);
+        Client client2 = ClientConverter.toEntityCreate(entity);
 
         clientRepository.save(client2);
         phoneRepository.saveAll(client2.getPhones());
@@ -78,11 +77,12 @@ public class ClientService {
 
     @Transactional // Endpoint que faz update de somente 3 campos
     public void update(Integer id, ClientDTO clientDTO) {
-        ClientDTO ctDTO = findById(id);
+        Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new IdNotFoundException("Client not found"));
 
-        ClientValidator.validatorUpdate(ctDTO, clientDTO);
+        ClientValidator.validatorUpdate(client, clientDTO);
 
-        Client ct1 = ClientConverter.toEntity(ctDTO);
+        Client ct1 = ClientConverter.toEntityUpdate(client, clientDTO);
 
         clientRepository.save(ct1);
     }

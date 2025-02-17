@@ -1,13 +1,15 @@
 package com.dev.StockManager.controllers;
 
+import com.dev.StockManager.config.security.TokenService;
 import com.dev.StockManager.dtos.AddressDTO;
+import com.dev.StockManager.dtos.ResponseDTO;
 import com.dev.StockManager.dtos.client.ClientDTO;
 import com.dev.StockManager.dtos.PhoneDTO;
 import com.dev.StockManager.dtos.client.CreateClientDTO;
+import com.dev.StockManager.dtos.client.SingInClientDTO;
 import com.dev.StockManager.dtos.sales.SalesOrderDTO;
 import com.dev.StockManager.services.ClientService;
 import com.dev.StockManager.services.SalesOrderService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,9 @@ public class ClientController {
     @Autowired
     private SalesOrderService salesService;
 
+    @Autowired
+    private TokenService tokenService;
+
     @GetMapping
     public ResponseEntity<List<ClientDTO>> findAll() {
         return ResponseEntity.ok().body(clientService.findAll());
@@ -41,11 +46,17 @@ public class ClientController {
         return ResponseEntity.ok().body(salesService.allCustomerOrders(clientId));
     }
 
-    @PostMapping
-    public ResponseEntity<CreateClientDTO> create(@RequestBody CreateClientDTO client) {
-        clientService.create(client);
+    @PostMapping(value = "/login")
+    public ResponseEntity<?> signIn(@RequestBody SingInClientDTO client) {
+        String token = clientService.singInClient(client);
+        return ResponseEntity.ok().body(new ResponseDTO(client.getName(), token));
+    }
+
+    @PostMapping(value = "/register")
+    public ResponseEntity<?> create(@RequestBody CreateClientDTO client) {
+        String token = clientService.registerClient(client);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(client).toUri();
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(uri).body(new ResponseDTO(client.getName(), token));
     }
 
     @PutMapping(value = "/{id}")

@@ -1,5 +1,6 @@
 package com.dev.StockManager.services;
 
+import com.dev.StockManager.config.security.TokenService;
 import com.dev.StockManager.converter.AddressConverter;
 import com.dev.StockManager.converter.ClientConverter;
 import com.dev.StockManager.converter.PhoneConverter;
@@ -7,6 +8,7 @@ import com.dev.StockManager.dtos.AddressDTO;
 import com.dev.StockManager.dtos.client.ClientDTO;
 import com.dev.StockManager.dtos.PhoneDTO;
 import com.dev.StockManager.dtos.client.CreateClientDTO;
+import com.dev.StockManager.dtos.client.SingInClientDTO;
 import com.dev.StockManager.entities.Address;
 import com.dev.StockManager.entities.Client;
 import com.dev.StockManager.entities.Phone;
@@ -22,6 +24,7 @@ import com.dev.StockManager.validator.ClientValidator;
 import com.dev.StockManager.validator.CpfOrCnpjValidator;
 import com.dev.StockManager.validator.PhoneValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +49,12 @@ public class ClientService {
     @Autowired
     private SalesOrderRepository salesOrderRepository;
 
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public List<ClientDTO> findAll() {
         List<Client> list = clientRepository.findAll();
         return list.stream().map(ClientDTO::new).toList();
@@ -58,8 +67,17 @@ public class ClientService {
         return new ClientDTO(client);
     }
 
+    public String singInClient(SingInClientDTO entity){
+        Client client = clientRepository.findByName(entity.getName()).orElseThrow();
+        if (passwordEncoder.matches(entity.getPassword(), client.getPassword())){
+            String token = tokenService.tokenGenerate(client);
+            return token;
+        }
+        throw new RuntimeException("error");
+    }
+
     @Transactional
-    public void create(CreateClientDTO entity) {
+    public String registerClient(CreateClientDTO entity) {
 
         // Validações de entidades
         ClientValidator.validator(entity);
@@ -67,12 +85,16 @@ public class ClientService {
         AddressValidator.addressesValidator(entity.getAddresses());
         PhoneValidator.phonesValidator(entity.getPhones());
 
-        Client client2 = ClientConverter.toEntityCreate(entity);
+        Client newClient = ClientConverter.toEntityCreate(entity);
 
-        clientRepository.save(client2);
-        phoneRepository.saveAll(client2.getPhones());
-        addressRepository.saveAll(client2.getAddresses());
+        // criptografando a senha
+        newClient.setPassword(passwordEncoder.encode(entity.getPassword()));
 
+        clientRepository.save(newClient);
+        phoneRepository.saveAll(newClient.getPhones());
+        addressRepository.saveAll(newClient.getAddresses());
+
+        return tokenService.tokenGenerate(newClient);
     }
 
     @Transactional // Endpoint que faz update de somente 3 campos

@@ -5,8 +5,6 @@ import com.dev.StockManager.dtos.client.ClientShortDTO;
 import com.dev.StockManager.dtos.client.CreateClientDTO;
 import com.dev.StockManager.entities.Client;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -25,14 +23,11 @@ public class ClientConverter {
     }
 
     public static Client toEntityCreate(CreateClientDTO dto) {
-        PasswordEncoder pe = new BCryptPasswordEncoder();
 
         Client client = new Client();
         client.setEmail(dto.getEmail().strip());
         client.setName(dto.getName().strip());
         client.setDocument(dto.getDocument().strip());
-        // TESTANDO O CRIPT
-        client.setPassword(pe.encode(dto.getPassword()));
         client.setRegister_Moment(Timestamp.from(Instant.now()));
         client.setType(dto.getType());
 

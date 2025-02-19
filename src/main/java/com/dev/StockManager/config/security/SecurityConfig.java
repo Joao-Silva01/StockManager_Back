@@ -24,25 +24,37 @@ public class SecurityConfig {
     private SecurityFilter securityFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
-      http
-              .csrf(csrf -> csrf.disable())
-              .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-              .authorizeHttpRequests(authorize -> authorize
-                      .requestMatchers(HttpMethod.POST, "/clients/register").permitAll()
-                      .requestMatchers(HttpMethod.POST, "/clients/login").permitAll()
-                      .anyRequest().authenticated()
-              ).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
-      return http.build();
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.GET, "/clients").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/clients/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/clients/*/orders").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/clients/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/clients/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/clients/login").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/categories").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/categories").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/products").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/products").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/orders").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                ).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 }

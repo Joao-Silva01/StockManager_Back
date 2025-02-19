@@ -18,24 +18,24 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping
+    @GetMapping // ALL
     public ResponseEntity<List<CategoryDTO>> findAll(){
         return ResponseEntity.ok().body(categoryService.ListAll());
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/{id}") // ALL
     public ResponseEntity<CategoryDTO> findByCategory(@PathVariable Integer id){
         return ResponseEntity.ok().body(categoryService.findbyCategory(id));
     }
 
-    @PostMapping
+    @PostMapping // ADMIN
     public ResponseEntity<CategoryDTO> create(@RequestBody CategoryDTO body){
         categoryService.create(body);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(body.getCode()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
-    @PutMapping(value = "/{code}")
+    @PutMapping(value = "/{code}") // ADMIN
     public ResponseEntity<?> update(@PathVariable Integer code,@RequestBody CategoryDTO body){
         categoryService.update(code,body);
         return ResponseEntity.noContent().build();

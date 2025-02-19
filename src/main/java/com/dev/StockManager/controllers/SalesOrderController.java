@@ -18,27 +18,27 @@ public class SalesOrderController {
     @Autowired
     private SalesOrderService salesService;
 
-    @GetMapping
+    @GetMapping // ADMIN
     public ResponseEntity<List<SalesOrderDTO>> allCustomerOrders (){
         var list = salesService.allOrders();
 
         return ResponseEntity.ok().body(list);
     }
 
-    @PostMapping(value = "/{clientId}")
+    @PostMapping(value = "/{clientId}") // ALL
     public ResponseEntity<?> create (@PathVariable Integer clientId, @RequestBody SalesOrderShortDTO body){
         salesService.createOrder(clientId,body);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(body).toUri();
         return ResponseEntity.created(uri).build();
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/{id}") // ALL
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody SalesOrderShortDTO dto){
         salesService.updateOrder(id, dto);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping(value = "/{orderId}")
+    @DeleteMapping(value = "/{orderId}") // ALL
     public ResponseEntity<?> delete(@PathVariable Integer orderId){
         salesService.deleteOrder(orderId);
         return ResponseEntity.noContent().build();

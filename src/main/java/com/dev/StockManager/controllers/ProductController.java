@@ -22,7 +22,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping
+    @GetMapping // ALL
     public ResponseEntity<List<?>> findAll() {
         var list = productService.findAll();
 
@@ -30,20 +30,20 @@ public class ProductController {
 
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/{id}") // ALL
     public ResponseEntity<?> findById(@PathVariable Integer id) {
         var entity = productService.findById(id);
         return ResponseEntity.ok().body(entity);
     }
 
-    @PostMapping
+    @PostMapping // ADMIN
     public ResponseEntity<?> create(@RequestBody ProductDTO entity) {
         productService.Create(entity);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(entity.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/{id}") // ADMIN
     public ResponseEntity<?> update(@PathVariable Integer id,@RequestBody ProductDTO entity) {
         productService.update(id, entity);
         return ResponseEntity.noContent().build();

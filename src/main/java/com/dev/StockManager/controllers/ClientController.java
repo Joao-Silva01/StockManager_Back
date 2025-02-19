@@ -31,53 +31,53 @@ public class ClientController {
     @Autowired
     private TokenService tokenService;
 
-    @GetMapping
+    @GetMapping // ADMIN
     public ResponseEntity<List<ClientDTO>> findAll() {
         return ResponseEntity.ok().body(clientService.findAll());
     }
 
-    @GetMapping(value = "{id}")
+    @GetMapping(value = "/{id}") // ADMIN
     public ResponseEntity<ClientDTO> findById(@PathVariable int id) {
         return ResponseEntity.ok().body(clientService.findById(id));
     }
 
-    @GetMapping(value = "/{clientId}/orders")
+    @GetMapping(value = "/{clientId}/orders") // ADMIN
     public ResponseEntity<List<SalesOrderDTO>> findAllOrders(@PathVariable Integer clientId) {
         return ResponseEntity.ok().body(salesService.allCustomerOrders(clientId));
     }
 
-    @PostMapping(value = "/login")
+    @PostMapping(value = "/login") // ALL
     public ResponseEntity<?> signIn(@RequestBody SingInClientDTO client) {
         String token = clientService.singInClient(client);
         return ResponseEntity.ok().body(new ResponseDTO(client.getEmail(), token));
     }
 
-    @PostMapping(value = "/register")
+    @PostMapping(value = "/register") // ALL
     public ResponseEntity<?> create(@RequestBody CreateClientDTO client) {
         String token = clientService.registerClient(client);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(client).toUri();
         return ResponseEntity.created(uri).body(new ResponseDTO(client.getName(), token));
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/{id}") // ALL
     public ResponseEntity<ClientDTO> update(@PathVariable Integer id, @RequestBody ClientDTO client) {
         clientService.update(id, client);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/{clientId}/phones/{phoneId}")
+    @PutMapping(value = "/{clientId}/phones/{phoneId}") // ALL
     public ResponseEntity<PhoneDTO> updatePhone(@PathVariable Integer clientId, @PathVariable Integer phoneId, @RequestBody PhoneDTO phone) {
         clientService.updateClientPhone(clientId, phoneId, phone);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/{clientId}/addresses/{indexAddress}")
+    @PutMapping(value = "/{clientId}/addresses/{indexAddress}") // ALL
     public ResponseEntity<PhoneDTO> updateAddress(@PathVariable Integer clientId, @PathVariable Integer indexAddress, @RequestBody AddressDTO address) {
         clientService.updateClientAddress(clientId, indexAddress, address);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/{id}") // ADMIN
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         clientService.delete(id);
         return ResponseEntity.noContent().build();

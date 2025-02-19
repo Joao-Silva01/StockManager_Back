@@ -4,6 +4,7 @@ import com.dev.StockManager.dtos.client.ClientDTO;
 import com.dev.StockManager.dtos.client.ClientShortDTO;
 import com.dev.StockManager.dtos.client.CreateClientDTO;
 import com.dev.StockManager.entities.Client;
+import com.dev.StockManager.entities.enums.UserRole;
 
 
 import java.sql.Timestamp;
@@ -30,6 +31,9 @@ public class ClientConverter {
         client.setDocument(dto.getDocument().strip());
         client.setRegister_Moment(Timestamp.from(Instant.now()));
         client.setType(dto.getType());
+
+        // ROLE PADRÃO
+        client.setRole(UserRole.USER);
 
         client.setAddresses(AddressConverter.toListDTO(dto.getAddresses(), client));
         client.setPhones(PhoneConverter.toListDTO(dto.getPhones(), client));

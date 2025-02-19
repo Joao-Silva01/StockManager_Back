@@ -68,7 +68,7 @@ public class ClientService {
     }
 
     public String singInClient(SingInClientDTO entity){
-        Client client = clientRepository.findByName(entity.getName()).orElseThrow();
+        Client client = clientRepository.findByEmail(entity.getEmail()).orElseThrow();
         if (passwordEncoder.matches(entity.getPassword(), client.getPassword())){
             String token = tokenService.tokenGenerate(client);
             return token;

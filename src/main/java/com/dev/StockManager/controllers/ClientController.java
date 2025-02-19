@@ -49,7 +49,7 @@ public class ClientController {
     @PostMapping(value = "/login")
     public ResponseEntity<?> signIn(@RequestBody SingInClientDTO client) {
         String token = clientService.singInClient(client);
-        return ResponseEntity.ok().body(new ResponseDTO(client.getName(), token));
+        return ResponseEntity.ok().body(new ResponseDTO(client.getEmail(), token));
     }
 
     @PostMapping(value = "/register")

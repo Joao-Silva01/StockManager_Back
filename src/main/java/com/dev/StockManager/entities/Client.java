@@ -1,6 +1,7 @@
 package com.dev.StockManager.entities;
 
 
+import com.dev.StockManager.entities.enums.UserRole;
 import com.dev.StockManager.entities.enums.TypeClient;
 import jakarta.persistence.*;
 
@@ -26,6 +27,9 @@ public class Client  implements Serializable {
     @Enumerated(value = EnumType.ORDINAL)
     private TypeClient type;
 
+    @Enumerated(value = EnumType.STRING)
+    private UserRole role;
+
     @OneToMany(mappedBy = "clientId",cascade = CascadeType.REMOVE)
     private List<Phone> phones = new ArrayList<>();
 
@@ -37,7 +41,7 @@ public class Client  implements Serializable {
 
     public Client(){}
 
-    public Client(Integer id, String name, String document, String email, Timestamp register_Moment, String password, TypeClient type) {
+    public Client(Integer id, String name, String document, String email, Timestamp register_Moment, String password, TypeClient type,UserRole role) {
         this.id = id;
         this.name = name;
         this.document = document;
@@ -45,6 +49,7 @@ public class Client  implements Serializable {
         this.register_Moment = register_Moment;
         this.password = password;
         this.type = type;
+        this.role = role;
     }
 
     public Integer getId() {
@@ -101,6 +106,14 @@ public class Client  implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 
     public List<Phone> getPhones() {

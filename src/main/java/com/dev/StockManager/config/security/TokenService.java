@@ -22,7 +22,7 @@ public class TokenService {
 
             String tokenGenerated = JWT.create()
                     .withIssuer("StockManager")
-                    .withSubject(client.getName())
+                    .withSubject(client.getEmail())
                     .withExpiresAt(LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00")))
                     .sign(algorithm);
 

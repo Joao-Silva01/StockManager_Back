@@ -5,9 +5,9 @@ public enum SalesOrderStatus {
     COMPLETED(2),
     CANCELED(3);
 
-    private Integer cod;
+    private Integer code;
 
     SalesOrderStatus(int code) {
-        this.cod = code;
+        this.code = code;
     }
 }

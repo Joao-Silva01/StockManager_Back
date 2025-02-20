@@ -6,6 +6,7 @@ import com.dev.StockManager.dtos.product.CreateShortProductAssociationDTO;
 import com.dev.StockManager.dtos.sales.SalesOrderShortDTO;
 import com.dev.StockManager.dtos.sales.SalesOrderDTO;
 import com.dev.StockManager.entities.*;
+import com.dev.StockManager.entities.enums.SalesOrderStatus;
 import com.dev.StockManager.exceptions.IdNotFoundException;
 import com.dev.StockManager.repositories.*;
 import com.dev.StockManager.validator.SalesOrderValidator;
@@ -100,6 +101,20 @@ public class SalesOrderService {
     public void deleteOrder(Integer orderId){
         salesOrderRepository.findById(orderId).orElseThrow(() -> new IdNotFoundException("Order not found"));
         salesOrderRepository.deleteById(orderId);
+    }
+
+    public void modifyingOrderStatus(Integer orderId, Integer statusOrder){
+        SalesOrder salesOrder = salesOrderRepository.findById(orderId)
+                .orElseThrow(() -> new IdNotFoundException("Order not found"));
+
+        if(statusOrder == 2){
+            salesOrder.setStatus(SalesOrderStatus.COMPLETED);
+        }
+        else if (statusOrder == 3){
+            salesOrder.setStatus(SalesOrderStatus.CANCELED);
+        }
+
+        salesOrderRepository.save(salesOrder);
     }
 
 

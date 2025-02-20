@@ -38,6 +38,12 @@ public class SalesOrderController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping(value = "/{orderId}/{statusOrder}") // ALL
+    public ResponseEntity<?> updateStatus(@PathVariable Integer orderId, @PathVariable Integer statusOrder){
+        salesService.modifyingOrderStatus(orderId, statusOrder);
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping(value = "/{orderId}") // ALL
     public ResponseEntity<?> delete(@PathVariable Integer orderId){
         salesService.deleteOrder(orderId);

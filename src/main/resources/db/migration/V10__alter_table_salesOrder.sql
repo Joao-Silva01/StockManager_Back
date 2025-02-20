@@ -1,0 +1,2 @@
+ALTER TABLE Sales_Order
+MODIFY COLUMN status VARCHAR(9);

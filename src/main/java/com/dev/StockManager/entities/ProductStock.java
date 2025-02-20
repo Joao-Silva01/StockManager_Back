@@ -15,11 +15,12 @@ public class ProductStock {
 
     private Integer quantity;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)
     @JoinColumn(name = "product_id", unique = true)
     private Product product;
 
-    public ProductStock(){}
+    public ProductStock() {
+    }
 
     public ProductStock(Integer quantity, Product product) {
         this.quantity = quantity;

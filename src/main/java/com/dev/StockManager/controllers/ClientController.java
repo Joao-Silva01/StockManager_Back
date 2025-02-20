@@ -49,14 +49,14 @@ public class ClientController {
     @PostMapping(value = "/login") // ALL
     public ResponseEntity<?> signIn(@RequestBody SingInClientDTO client) {
         String token = clientService.singInClient(client);
-        return ResponseEntity.ok().body(new ResponseDTO(client.getEmail(), token));
+        return ResponseEntity.ok().body(new ResponseDTO(token));
     }
 
     @PostMapping(value = "/register") // ALL
     public ResponseEntity<?> create(@RequestBody CreateClientDTO client) {
         String token = clientService.registerClient(client);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(client).toUri();
-        return ResponseEntity.created(uri).body(new ResponseDTO(client.getName(), token));
+        return ResponseEntity.created(uri).body(new ResponseDTO(token));
     }
 
     @PutMapping(value = "/{id}") // ALL

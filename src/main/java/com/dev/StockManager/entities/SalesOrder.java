@@ -25,7 +25,7 @@ public class SalesOrder implements Serializable {
     @Column(name = "date_moment")
     private Timestamp dateMoment;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private SalesOrderStatus status;
 
     @ManyToOne

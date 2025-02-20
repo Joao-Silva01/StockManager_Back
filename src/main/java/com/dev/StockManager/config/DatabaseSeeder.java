@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -35,8 +36,9 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        try{
         var passwordAdmin = passwordEncoder.encode(System.getenv("ADMIN_PASSWORD"));
-        Client client1 = new Client(null, "ADMIN", null, "admin@gmail.com", null, passwordAdmin, null, UserRole.ADMIN);
+        Client client1 = new Client(null, "ADMIN", "", "admin@gmail.com", null, passwordAdmin, null, UserRole.ADMIN);
 
         Client client2 = new Client(null, "Pedro Cavalcante", "90661616045", "cava2004@gmail.com",
                 Timestamp.from(Instant.now()), passwordEncoder.encode("pedro"), TypeClient.INDIVIDUAL_CLIENT, UserRole.USER);
@@ -109,5 +111,9 @@ public class DatabaseSeeder implements CommandLineRunner {
         categoryRepository.saveAll(List.of(category1, category2, category3));
         productRepository.saveAll(List.of(product1_1, product1_2, product2_1, product2_2, product3_1, product3_2));
         productStockRepository.saveAll(List.of(productStock1_1, productStock1_2, productStock2_1, productStock2_2, productStock3_1, productStock3_2));
+        } catch (Exception e){
+            return;
+        }
+
     }
 }
